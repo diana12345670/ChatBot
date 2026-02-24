@@ -64,10 +64,19 @@
     <div class="container">
       <div class="card">
         <h1>Admin</h1>
-        <p>Para usar esta tela, envie o header <code>x-admin-key</code> nas requisições da API, com o valor de <code>ADMIN_MASTER_KEY</code>.</p>
+        <div id="loginSection">
+          <p>Insira a chave de administrador para acessar o painel.</p>
+          <label for="adminKeyInput">Chave Admin:</label>
+          <input type="password" id="adminKeyInput" placeholder="Digite a chave de acesso">
+          <button class="btn" onclick="loginAdmin()" style="margin-top: 8px;">Acessar Painel</button>
+          <div id="loginError" style="color: #ff6b6b; margin-top: 8px; display: none;">Chave incorreta. Tente novamente.</div>
+        </div>
+        <div id="adminPanel" style="display: none;">
+          <p style="color: #4ade80;">✓ Autenticado com sucesso</p>
+        </div>
       </div>
 
-      <div class="card">
+      <div id="metricsCard" class="card" style="display: none;">
         <h2 style="margin:0 0 6px;">Estabilidade e métricas</h2>
         <div class="row">
           <div><p style="margin:0;"><b>Clientes</b></p><p id="m_clients" style="margin:6px 0 0;" class="msg"></p></div>
@@ -78,7 +87,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div id="codeCard" class="card" style="display: none;">
         <h2 style="margin:0 0 6px;">Gerar código de login</h2>
         <div class="row">
           <div>
@@ -103,7 +112,7 @@
         <div id="genMsg" class="msg"></div>
       </div>
 
-      <div class="card">
+      <div id="codesCard" class="card" style="display: none;">
         <h2 style="margin:0 0 6px;">Códigos</h2>
         <p style="margin:8px 0;">Ações rápidas por cliente: renovar, mudar plano e gerar um novo código sem perder configurações.</p>
 
@@ -144,6 +153,26 @@
 
       function adminKey() {
         return localStorage.getItem('ADMIN_MASTER_KEY') || '';
+      }
+
+      function loginAdmin() {
+        const key = document.getElementById('adminKeyInput').value;
+        if (key === 'ABEL2011') {
+          localStorage.setItem('ADMIN_MASTER_KEY', key);
+          document.getElementById('loginSection').style.display = 'none';
+          document.getElementById('adminPanel').style.display = 'block';
+          document.getElementById('metricsCard').style.display = 'block';
+          document.getElementById('codeCard').style.display = 'block';
+          document.getElementById('codesCard').style.display = 'block';
+          document.getElementById('loginError').style.display = 'none';
+          refreshMetrics();
+          listCodes();
+        } else {
+          document.getElementById('loginError').style.display = 'block';
+          setTimeout(() => {
+            document.getElementById('loginError').style.display = 'none';
+          }, 3000);
+        }
       }
 
       function setMsg(el, msg, kind) {
@@ -267,6 +296,17 @@
         await listCodes();
       }
 
+      // Check if already authenticated on page load
+      if (adminKey()) {
+        document.getElementById('loginSection').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        document.getElementById('metricsCard').style.display = 'block';
+        document.getElementById('codeCard').style.display = 'block';
+        document.getElementById('codesCard').style.display = 'block';
+        refreshMetrics().catch(() => {});
+        listCodes().catch(() => {});
+      }
+
       $('refreshBtn').addEventListener('click', () => refreshMetrics().catch(() => {}));
       $('genBtn').addEventListener('click', () => genCode().catch(() => {}));
       $('listBtn').addEventListener('click', () => listCodes().catch(() => {}));
@@ -275,8 +315,6 @@
       $('toBasicBtn').addEventListener('click', () => changePlan('basic').catch(() => setMsg($('clientMsg'), 'Falha ao mudar plano.', 'bad')));
       $('toProBtn').addEventListener('click', () => changePlan('pro').catch(() => setMsg($('clientMsg'), 'Falha ao mudar plano.', 'bad')));
       $('genForClientBtn').addEventListener('click', () => genForClient().catch(() => setMsg($('clientMsg'), 'Falha ao gerar código.', 'bad')));
-
-      refreshMetrics().catch(() => {});
     </script>
   </body>
 </html>
