@@ -394,6 +394,298 @@
         color: var(--muted);
       }
 
+      /* Enhanced Tutorial Styles */
+      .tutorial-section {
+        margin-bottom: 24px;
+        padding: 16px;
+        border: 1px solid var(--stroke);
+        border-radius: 12px;
+        background: linear-gradient(135deg, rgba(11,97,255,0.05) 0%, rgba(27,144,255,0.03) 100%);
+      }
+      .tutorial-section h4 {
+        margin: 0 0 12px;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--blue);
+      }
+      .tutorial-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .tutorial-list li {
+        padding: 8px 0;
+        padding-left: 24px;
+        position: relative;
+        font-size: 14px;
+        color: var(--text);
+      }
+      .tutorial-list li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: var(--blue);
+        font-weight: 700;
+      }
+      .tutorial-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--blue);
+        text-decoration: none;
+        font-weight: 600;
+        padding: 8px 12px;
+        border: 1px solid rgba(11,97,255,0.2);
+        border-radius: 8px;
+        background: rgba(11,97,255,0.05);
+        margin-top: 8px;
+        transition: all 0.3s ease;
+      }
+      .tutorial-link:hover {
+        background: rgba(11,97,255,0.1);
+        transform: translateY(-1px);
+      }
+      .link-icon {
+        font-size: 16px;
+      }
+      .video-tutorial {
+        margin-top: 16px;
+        padding: 12px;
+        border: 1px solid rgba(11,97,255,0.15);
+        border-radius: 8px;
+        background: rgba(11,97,255,0.03);
+      }
+      .video-tutorial h5 {
+        margin: 0 0 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--blue);
+      }
+      .video-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .video-link:hover {
+        color: var(--blue);
+      }
+      .play-icon {
+        font-size: 12px;
+      }
+      .credential-guide, .tokens-guide, .webhook-setup, .openai-guide {
+        margin-top: 12px;
+      }
+      .credential-item, .setup-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+        padding: 8px;
+        background: rgba(255,255,255,0.6);
+        border-radius: 6px;
+      }
+      .cred-label, .setup-label {
+        min-width: 120px;
+        font-weight: 600;
+        font-size: 13px;
+        color: var(--text);
+      }
+      .token-item {
+        margin-bottom: 16px;
+        padding: 12px;
+        border: 1px solid var(--stroke);
+        border-radius: 8px;
+        background: rgba(255,255,255,0.8);
+      }
+      .token-item h5 {
+        margin: 0 0 6px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+      }
+      .token-item p {
+        margin: 0 0 8px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .final-checklist {
+        margin-top: 12px;
+        padding: 12px;
+        border: 1px solid rgba(11,97,255,0.2);
+        border-radius: 8px;
+        background: linear-gradient(135deg, rgba(11,97,255,0.08) 0%, rgba(27,144,255,0.05) 100%);
+      }
+      .final-checklist h5 {
+        margin: 0 0 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--blue);
+      }
+      .checklist {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .checklist li {
+        padding: 4px 0;
+        font-size: 13px;
+        color: var(--text);
+      }
+
+      /* Login & Dashboard Styles */
+      .login-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        margin-top: 24px;
+      }
+      .login-card, .dashboard-card {
+        border: 1px solid var(--stroke);
+        border-radius: 20px;
+        background: rgba(255,255,255,0.95);
+        padding: 32px;
+        box-shadow: 0 8px 32px rgba(10,25,60,0.08);
+      }
+      .card-header {
+        text-align: center;
+        margin-bottom: 24px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--stroke);
+      }
+      .card-header h2, .card-header h3 {
+        margin: 0 0 8px;
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--text);
+      }
+      .card-header p {
+        margin: 0;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .form-section {
+        margin-bottom: 24px;
+      }
+      .form-section h3 {
+        margin: 0 0 16px;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .form-group {
+        margin-bottom: 16px;
+      }
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+      .form-actions {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+      }
+      .divider {
+        text-align: center;
+        margin: 24px 0;
+        position: relative;
+      }
+      .divider::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: var(--stroke);
+      }
+      .divider span {
+        background: rgba(255,255,255,0.95);
+        padding: 0 16px;
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .login-footer {
+        text-align: center;
+        padding-top: 16px;
+        border-top: 1px solid var(--stroke);
+        margin-top: 24px;
+      }
+      .login-footer p {
+        margin: 0;
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .access-denied {
+        text-align: center;
+        padding: 40px 20px;
+        border: 2px dashed var(--stroke);
+        border-radius: 16px;
+        background: rgba(11,97,255,0.02);
+      }
+      .denied-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+      .access-denied h4 {
+        margin: 0 0 8px;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .access-denied p {
+        margin: 0;
+        font-size: 14px;
+        color: var(--muted);
+      }
+      .dashboard-content {
+        animation: fadeIn 0.3s ease;
+      }
+      .config-section {
+        margin-bottom: 24px;
+      }
+      .config-section h4 {
+        margin: 0 0 20px;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--stroke);
+      }
+      .webhook-info {
+        margin-top: 24px;
+        padding: 16px;
+        border: 1px solid rgba(11,97,255,0.2);
+        border-radius: 12px;
+        background: rgba(11,97,255,0.05);
+      }
+      .webhook-info h5 {
+        margin: 0 0 8px;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--blue);
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--blue) 0%, var(--blue2) 100%);
+        color: white;
+        border: none;
+      }
+      .btn-secondary {
+        background: rgba(255,255,255,0.9);
+        color: var(--text);
+        border: 1px solid var(--stroke);
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
       @media (max-width: 768px) {
         .features { grid-template-columns: 1fr; gap: 20px; }
         .feature-card { padding: 24px; }
@@ -401,6 +693,17 @@
         .steps { grid-template-columns: 1fr; gap: 24px; }
         .testimonial-grid { grid-template-columns: 1fr; }
         .testimonial { padding: 24px; }
+        
+        /* Login responsive */
+        .login-container { grid-template-columns: 1fr; gap: 16px; }
+        .login-card, .dashboard-card { padding: 24px; }
+        .card-header h2, .card-header h3 { font-size: 20px; }
+        .form-row { grid-template-columns: 1fr; gap: 12px; }
+        .form-actions { flex-direction: column; }
+        .tutorial-step { flex-direction: column; text-align: center; }
+        .tutorial-number { margin: 0 auto 16px; }
+        .credential-item, .setup-item { flex-direction: column; align-items: flex-start; gap: 8px; }
+        .cred-label, .setup-label { min-width: auto; margin-bottom: 4px; }
       }
     </style>
   </head>
@@ -535,7 +838,162 @@
               <div class="testimonial-author">
                 <div class="author-info">
                   <div class="author-name">Pedro Costa</div>
-                  <div class="author-title">Marketing, Fashion Plus</div>
+                  <div class="webhook-info">
+                <h5>🔗 Webhook URL</h5>
+                <code id="webhookUrl"></code>
+              </div>
+            </div>
+
+            <div class="tutorial-section">
+              <h4>📋 Tutorial Completo</h4>
+              <div class="tutorial-content">
+                <div class="tutorial-subsection">
+                  <h5>📋 Requisitos</h5>
+                  <ul class="tutorial-list">
+                    <li>Conta WhatsApp Business verificada</li>
+                    <li>Número de telefone com WhatsApp Business</li>
+                    <li>Cartão de crédito (para taxas da Meta)</li>
+                    <li>Chave API OpenAI</li>
+                  </ul>
+                </div>
+
+                <div class="tutorial-step">
+                  <div class="tutorial-number">1</div>
+                  <div class="tutorial-text">
+                    <h4>Criar App no Meta for Developers</h4>
+                    <p>Acesse o site oficial do Meta e crie seu aplicativo WhatsApp.</p>
+                    <a href="https://developers.facebook.com/apps" target="_blank" class="tutorial-link">
+                      <span class="link-icon">🔗</span>
+                      <span>developers.facebook.com/apps</span>
+                    </a>
+                    <div class="video-tutorial">
+                      <h5>📹 Vídeo Tutorial</h5>
+                      <a href="#" class="video-link" onclick="alert('Em breve: Vídeo completo de criação de App Meta')">
+                        <span class="play-icon">▶️</span>
+                        Como criar App WhatsApp do zero
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tutorial-step">
+                  <div class="tutorial-number">2</div>
+                  <div class="tutorial-text">
+                    <h4>Configurar WhatsApp Business API</h4>
+                    <p>Adicione o produto WhatsApp ao seu App e configure as credenciais.</p>
+                    <div class="credential-guide">
+                      <div class="credential-item">
+                        <span class="cred-label">Webhook URL:</span>
+                        <code id="webhookUrlTutorial"></code>
+                      </div>
+                      <div class="credential-item">
+                        <span class="cred-label">Verify Token:</span>
+                        <input type="text" id="verifyTokenDisplay" readonly style="background: #f5f5f5; font-size: 12px;" />
+                      </div>
+                    </div>
+                    <div class="video-tutorial">
+                      <h5>📹 Vídeo Tutorial</h5>
+                      <a href="#" class="video-link" onclick="alert('Em breve: Vídeo completo de configuração WhatsApp API')">
+                        <span class="play-icon">▶️</span>
+                        Configurar WhatsApp Business API
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tutorial-step">
+                  <div class="tutorial-number">3</div>
+                  <div class="tutorial-text">
+                    <h4>Obter Tokens de Acesso</h4>
+                    <p>Gere as credenciais necessárias no painel do Meta.</p>
+                    <div class="tokens-guide">
+                      <div class="token-item">
+                        <h5>🔑 WHATSAPP_TOKEN</h5>
+                        <p>Token de acesso permanente para enviar mensagens</p>
+                        <a href="#" class="video-link" onclick="alert('Em breve: Vídeo de como gerar Permanent Token')">
+                          <span class="play-icon">▶️</span>
+                          Vídeo: Gerar Permanent Token
+                        </a>
+                      </div>
+                      <div class="token-item">
+                        <h5>📞 PHONE_NUMBER_ID</h5>
+                        <p>ID do seu número de telefone WhatsApp</p>
+                        <a href="#" class="video-link" onclick="alert('Em breve: Vídeo de como encontrar Phone Number ID')">
+                          <span class="play-icon">▶️</span>
+                          Vídeo: Encontrar Phone ID
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tutorial-step">
+                  <div class="tutorial-number">4</div>
+                  <div class="tutorial-text">
+                    <h4>Configurar Webhook</h4>
+                    <p>Use as credenciais abaixo para conectar seu WhatsApp ao sistema.</p>
+                    <div class="webhook-setup">
+                      <div class="setup-item">
+                        <span class="setup-label">1. Copie a URL:</span>
+                        <code id="webhookUrlFinal"></code>
+                      </div>
+                      <div class="setup-item">
+                        <span class="setup-label">2. Cole em:</span>
+                        <a href="https://developers.facebook.com/apps" target="_blank" class="tutorial-link">
+                          <span class="link-icon">🔗</span>
+                          Meta for Developers → WhatsApp → Configuration
+                        </a>
+                      </div>
+                      <div class="setup-item">
+                        <span class="setup-label">3. Verify Token:</span>
+                        <input type="text" id="verifyTokenFinal" readonly style="background: #f5f5f5; font-size: 12px;" />
+                      </div>
+                      <div class="setup-item">
+                        <span class="setup-label">4. Inscreva campos:</span>
+                        <code>messages, message_deliveries, message_reads</code>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tutorial-step">
+                  <div class="tutorial-number">5</div>
+                  <div class="tutorial-text">
+                    <h4>Configurar OpenAI</h4>
+                    <p>Obtenha sua chave API da OpenAI para alimentar a IA.</p>
+                    <div class="openai-guide">
+                      <a href="https://platform.openai.com/api-keys" target="_blank" class="tutorial-link">
+                        <span class="link-icon">🔗</span>
+                        <span>platform.openai.com/api-keys</span>
+                      </a>
+                      <div class="video-tutorial">
+                        <h5>📹 Vídeo Tutorial</h5>
+                        <a href="#" class="video-link" onclick="alert('Em breve: Vídeo completo de configuração OpenAI')">
+                          <span class="play-icon">▶️</span>
+                          Como criar chave API OpenAI
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="tutorial-step">
+                  <div class="tutorial-number">6</div>
+                  <div class="tutorial-text">
+                    <h4>Finalizar Configuração</h4>
+                    <p>Preencha todos os campos no painel acima e ative seu chatbot.</p>
+                    <div class="final-checklist">
+                      <h5>✅ Checklist Final:</h5>
+                      <ul class="checklist">
+                        <li>✓ WHATSAPP_TOKEN configurado</li>
+                        <li>✓ PHONE_NUMBER_ID preenchido</li>
+                        <li>✓ Webhook verificado no Meta</li>
+                        <li>✓ Prompt personalizado</li>
+                        <li>✓ OpenAI API Key ativa</li>
+                        <li>✓ Teste de mensagem enviado</li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -583,121 +1041,101 @@
         <div class="card" style="margin-top:14px;">
           <p class="k">Contato</p>
           <p class="v">+55 71 996086559</p>
-          <p class="sub">Envie uma mensagem para receber instruções e ativação do seu plano.</p>
-        </div>
-      </section>
-
-      <section id="login">
-        <div class="login">
-          <div>
-            <h2 style="margin:0 0 6px; letter-spacing:-0.4px;">Acesso</h2>
-            <p class="sub">Crie sua conta com código de ativação ou entre com email e senha.</p>
-
-            <div class="card" style="margin:12px 0; background: rgba(255,255,255,0.65);">
-              <h3 style="margin:0 0 8px;">Criar conta</h3>
               <label for="signup_code">Código de ativação</label>
               <input id="signup_code" type="password" placeholder="Código fornecido pela equipe" />
+            </div>
+            <div class="form-group">
               <label for="signup_email">Email</label>
               <input id="signup_email" type="email" placeholder="seu@email.com" />
+            </div>
+            <div class="form-group">
               <label for="signup_password">Senha</label>
               <input id="signup_password" type="password" placeholder="Mínimo 6 caracteres" />
-              <div class="cta">
-                <button class="btn" id="signupBtn">Criar conta</button>
-              </div>
-              <div id="signupMsg" class="msg"></div>
             </div>
-
-            <div class="card" style="margin:12px 0; background: rgba(255,255,255,0.65);">
-              <h3 style="margin:0 0 8px;">Entrar</h3>
-              <label for="login_email">Email</label>
-              <input id="login_email" type="email" placeholder="seu@email.com" />
-              <label for="login_password">Senha</label>
-              <input id="login_password" type="password" placeholder="Sua senha" />
-              <div class="cta">
-                <button class="btn" id="loginBtn">Entrar</button>
-                <button class="btn secondary" id="logoutBtn">Sair</button>
-              </div>
-              <div id="loginMsg" class="msg"></div>
-            </div>
-
-            <div class="footer">
-              Se o seu plano expirar, este acesso será bloqueado até resgatar um novo código.
-            </div>
+            <button class="btn btn-primary" id="signupBtn">Criar conta</button>
+            <div id="signupMsg" class="msg"></div>
           </div>
 
-          <div>
-            <div class="card">
-              <h3 style="margin:0 0 8px;">Painel de controle</h3>
-              <p class="sub" style="margin-top:0;">Configure WhatsApp e o prompt do atendimento.</p>
+          <div class="divider">
+            <span>ou</span>
+          </div>
 
-              <div id="panelLocked" class="msg bad">Faça login para acessar.</div>
-              <div id="panelExpired" class="msg bad" style="display:none;">Seu plano expirou. Por favor resgate um novo código para continuar usando nosso chat bot.</div>
+          <div class="form-section">
+            <h3>Entrar na conta</h3>
+            <div class="form-group">
+              <label for="login_email">Email</label>
+              <input id="login_email" type="email" placeholder="seu@email.com" />
+            </div>
+            <div class="form-group">
+              <label for="login_password">Senha</label>
+              <input id="login_password" type="password" placeholder="Sua senha" />
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" id="loginBtn">Entrar</button>
+              <button class="btn btn-secondary" id="logoutBtn" style="display:none;">Sair</button>
+            </div>
+            <div id="loginMsg" class="msg"></div>
+          </div>
 
-              <div id="panel" style="display:none;">
-                <label for="system_prompt">Prompt</label>
+          <div class="login-footer">
+            <p>Se o seu plano expirar, este acesso será bloqueado até resgatar um novo código.</p>
+          </div>
+        </div>
+
+        <div class="dashboard-card">
+          <div class="card-header">
+            <h3>📊 Painel de Controle</h3>
+            <p>Configure WhatsApp e o prompt do atendimento</p>
+          </div>
+
+          <div id="panelLocked" class="access-denied">
+            <div class="denied-icon">🔒</div>
+            <h4>Acesso Restrito</h4>
+            <p>Faça login para acessar o painel de configurações.</p>
+          </div>
+
+          <div id="panelExpired" class="access-denied" style="display:none;">
+            <div class="denied-icon">⏰</div>
+            <h4>Plano Expirado</h4>
+            <p>Seu plano expirou. Por favor resgate um novo código para continuar usando nosso chatbot.</p>
+          </div>
+
+          <div id="panel" class="dashboard-content" style="display:none;">
+            <div class="config-section">
+              <h4>⚙️ Configurações do Chatbot</h4>
+              
+              <div class="form-group">
+                <label for="system_prompt">Prompt do Assistente</label>
                 <textarea id="system_prompt" placeholder="Defina o comportamento do assistente"></textarea>
+              </div>
 
-                <label for="whatsapp_token">WHATSAPP_TOKEN</label>
-                <input id="whatsapp_token" type="password" />
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="whatsapp_token">WHATSAPP_TOKEN</label>
+                  <input id="whatsapp_token" type="password" />
+                </div>
+                <div class="form-group">
+                  <label for="phone_number_id">PHONE_NUMBER_ID</label>
+                  <input id="phone_number_id" type="text" />
+                </div>
+              </div>
 
-                <label for="phone_number_id">WHATSAPP_PHONE_NUMBER_ID</label>
-                <input id="phone_number_id" type="text" />
-
+              <div class="form-group">
                 <label for="graph_version">WHATSAPP_GRAPH_VERSION</label>
                 <input id="graph_version" type="text" placeholder="v20.0" />
+              </div>
 
+              <div class="form-group">
                 <label for="memory_max">Memória (máx. mensagens)</label>
                 <input id="memory_max" type="number" min="0" step="1" readonly style="background: #f5f5f5; cursor: not-allowed;" />
                 <small style="color: var(--muted); font-size: 12px; display: block; margin-top: 4px;">Definido automaticamente conforme seu plano</small>
-
-                <div class="cta" style="margin-top:12px;">
-                  <button class="btn" id="saveBtn">Salvar</button>
-                  <button class="btn secondary" id="reloadBtn">Recarregar</button>
-                </div>
-                <div id="cfgMsg" class="msg"></div>
-
-                <div class="footer">
-                  Webhook: <code id="webhookUrl"></code>
-                </div>
               </div>
-            </div>
 
-            <div class="card" style="margin-top:12px;">
-              <h3 style="margin:0 0 8px;">Tutorial Completo</h3>
-              <div class="tutorial-content">
-                <div class="tutorial-step">
-                  <div class="tutorial-number">1</div>
-                  <div class="tutorial-text">
-                    <h4>Configurar WhatsApp Business</h4>
-                    <p>Acesse o Meta for Developers e configure seu App WhatsApp com as credenciais necessárias.</p>
-                  </div>
-                </div>
-                <div class="tutorial-step">
-                  <div class="tutorial-number">2</div>
-                  <div class="tutorial-text">
-                    <h4>Obter Token de Acesso</h4>
-                    <p>Gere o WHATSAPP_TOKEN e PHONE_NUMBER_ID no painel do Meta para conectar sua API.</p>
-                  </div>
-                </div>
-                <div class="tutorial-step">
-                  <div class="tutorial-number">3</div>
-                  <div class="tutorial-text">
-                    <h4>Configurar Webhook</h4>
-                    <p>Use a URL fornecida abaixo no painel do Meta para receber mensagens automaticamente.</p>
-                  </div>
-                </div>
-                <div class="tutorial-step">
-                  <div class="tutorial-number">4</div>
-                  <div class="tutorial-text">
-                    <h4>Personalizar Assistente</h4>
-                    <p>Defina o prompt com o comportamento desejado para sua IA atender clientes.</p>
-                  </div>
-                </div>
+              <div class="form-actions">
+                <button class="btn btn-primary" id="saveBtn">Salvar Configurações</button>
+                <button class="btn btn-secondary" id="reloadBtn">Recarregar</button>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
+              <div id="cfgMsg" class="msg"></div>
     </div>
 
     <script>
@@ -730,6 +1168,15 @@
 
         const webhookUrl = window.location.origin + '/webhook';
         $('webhookUrl').textContent = webhookUrl;
+        
+        // Fill tutorial webhook URLs
+        if ($('webhookUrlTutorial')) $('webhookUrlTutorial').textContent = webhookUrl;
+        if ($('webhookUrlFinal')) $('webhookUrlFinal').textContent = webhookUrl;
+        
+        // Fill verify token (placeholder - should be set by admin)
+        const verifyToken = 'SEU_VERIFY_TOKEN_AQUI';
+        if ($('verifyTokenDisplay')) $('verifyTokenDisplay').value = verifyToken;
+        if ($('verifyTokenFinal')) $('verifyTokenFinal').value = verifyToken;
 
         if (!me.authenticated) {
           $('panel').style.display = 'none';
