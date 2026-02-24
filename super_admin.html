@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin</title>
+    <style>
+      :root {
+        --bg: #07142f;
+        --card: rgba(255,255,255,0.06);
+        --stroke: rgba(147, 197, 253, 0.18);
+        --text: #e6eefc;
+        --muted: rgba(230,238,252,0.68);
+        --blue: #0b61ff;
+        --blue2: #1b90ff;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+        background:
+          radial-gradient(900px 520px at 18% 12%, rgba(11,97,255,0.25), transparent 60%),
+          radial-gradient(900px 520px at 88% 0%, rgba(27,144,255,0.18), transparent 55%),
+          linear-gradient(180deg, #050b1a 0%, var(--bg) 100%);
+        color: var(--text);
+      }
+      .container { max-width: 980px; margin: 0 auto; padding: 28px 18px 70px; }
+      .card { border: 1px solid var(--stroke); background: var(--card); border-radius: 18px; padding: 16px; margin: 12px 0; backdrop-filter: blur(10px); }
+      h1 { margin: 0 0 6px; letter-spacing: -0.4px; }
+      p { margin: 8px 0; color: var(--muted); line-height: 1.5; }
+      label { display: block; font-weight: 750; margin: 10px 0 6px; }
+      input, select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid rgba(147,197,253,0.22);
+        border-radius: 14px;
+        background: rgba(3, 10, 26, 0.6);
+        color: var(--text);
+      }
+      .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      @media (max-width: 900px) { .row { grid-template-columns: 1fr; } }
+      .btn {
+        border: 1px solid rgba(11,97,255,0.26);
+        background: linear-gradient(135deg, var(--blue) 0%, var(--blue2) 100%);
+        color: white;
+        padding: 11px 14px;
+        border-radius: 14px;
+        font-weight: 750;
+        cursor: pointer;
+      }
+      .btn.secondary { background: transparent; border-color: rgba(147,197,253,0.22); }
+      .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+      .msg { min-height: 18px; color: var(--muted); font-size: 13px; }
+      .msg.ok { color: #5eead4; }
+      .msg.bad { color: #fecaca; }
+      code { background: rgba(11,97,255,0.12); border: 1px solid rgba(11,97,255,0.20); padding: 2px 6px; border-radius: 12px; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { border-bottom: 1px solid rgba(147,197,253,0.18); padding: 10px 8px; text-align: left; font-size: 13px; }
+      th { color: rgba(230,238,252,0.86); font-weight: 800; }
+      td { color: rgba(230,238,252,0.74); }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <h1>Admin</h1>
+        <p>Para usar esta tela, envie o header <code>x-admin-key</code> nas requisições da API, com o valor de <code>ADMIN_MASTER_KEY</code>.</p>
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 6px;">Estabilidade e métricas</h2>
+        <div class="row">
+          <div><p style="margin:0;"><b>Clientes</b></p><p id="m_clients" style="margin:6px 0 0;" class="msg"></p></div>
+          <div><p style="margin:0;"><b>Códigos</b></p><p id="m_codes" style="margin:6px 0 0;" class="msg"></p></div>
+        </div>
+        <div class="actions">
+          <button class="btn secondary" id="refreshBtn">Atualizar</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 6px;">Gerar código de login</h2>
+        <div class="row">
+          <div>
+            <label for="plan">Plano</label>
+            <select id="plan">
+              <option value="basic">Básico</option>
+              <option value="pro">Pro</option>
+            </select>
+          </div>
+          <div>
+            <label for="days">Duração (dias)</label>
+            <input id="days" type="number" min="1" step="1" value="30" />
+          </div>
+        </div>
+        <label for="client_name">Nome do cliente (opcional)</label>
+        <input id="client_name" type="text" placeholder="Identificação interna" />
+
+        <div class="actions">
+          <button class="btn" id="genBtn">Gerar</button>
+          <button class="btn secondary" id="listBtn">Listar códigos</button>
+        </div>
+        <div id="genMsg" class="msg"></div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 6px;">Códigos</h2>
+        <p style="margin:8px 0;">Ações rápidas por cliente: renovar, mudar plano e gerar um novo código sem perder configurações.</p>
+
+        <div class="row" style="margin:10px 0 12px;">
+          <div>
+            <label for="target_client_id">Client ID</label>
+            <input id="target_client_id" type="text" placeholder="Cole o client_id" />
+          </div>
+          <div>
+            <label for="target_days">Renovar (dias)</label>
+            <input id="target_days" type="number" min="1" step="1" value="30" />
+          </div>
+        </div>
+        <div class="actions">
+          <button class="btn" id="renewBtn">Renovar</button>
+          <button class="btn secondary" id="toBasicBtn">Mudar para Básico</button>
+          <button class="btn secondary" id="toProBtn">Mudar para Pro</button>
+          <button class="btn" id="genForClientBtn">Gerar novo código (mesmo cliente)</button>
+        </div>
+        <div id="clientMsg" class="msg"></div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Plano</th>
+              <th>Expira</th>
+              <th>Client ID</th>
+            </tr>
+          </thead>
+          <tbody id="codesBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      const $ = (id) => document.getElementById(id);
+
+      function adminKey() {
+        return localStorage.getItem('ADMIN_MASTER_KEY') || '';
+      }
+
+      function setMsg(el, msg, kind) {
+        el.textContent = msg || '';
+        el.classList.remove('ok', 'bad');
+        if (kind) el.classList.add(kind);
+      }
+
+      async function call(path, opts = {}) {
+        const headers = opts.headers || {};
+        headers['x-admin-key'] = adminKey();
+        opts.headers = headers;
+        return fetch(path, opts);
+      }
+
+      async function refreshMetrics() {
+        const r = await call('/api/admin/metrics');
+        if (!r.ok) {
+          setMsg($('m_clients'), 'Não autorizado. Defina ADMIN_MASTER_KEY no localStorage.', 'bad');
+          setMsg($('m_codes'), '', null);
+          return;
+        }
+        const m = await r.json();
+        setMsg($('m_clients'), `Total: ${m.clients_total} | Ativos: ${m.clients_active}`, 'ok');
+        setMsg($('m_codes'), `Total: ${m.codes_total}`, 'ok');
+      }
+
+      async function genCode() {
+        setMsg($('genMsg'), 'Gerando...', null);
+        const payload = {
+          plan: $('plan').value,
+          days: Number($('days').value || 30),
+          client_name: $('client_name').value,
+        };
+        const r = await call('/api/admin/codes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!r.ok) {
+          setMsg($('genMsg'), 'Falha ao gerar. Verifique a chave.', 'bad');
+          return;
+        }
+        const data = await r.json();
+        setMsg($('genMsg'), `Código: ${data.code} | Plano: ${data.plan} | Expira: ${data.expires_at}`, 'ok');
+        await refreshMetrics();
+      }
+
+      async function listCodes() {
+        const r = await call('/api/admin/codes');
+        if (!r.ok) return;
+        const data = await r.json();
+        const tbody = $('codesBody');
+        tbody.innerHTML = '';
+        (data.codes || []).forEach(c => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td><code>${c.code}</code></td><td>${c.plan}</td><td>${c.expires_at || ''}</td><td>${c.client_id}</td>`;
+          tbody.appendChild(tr);
+        });
+      }
+
+      async function renewClient() {
+        setMsg($('clientMsg'), 'Renovando...', null);
+        const payload = {
+          client_id: $('target_client_id').value.trim(),
+          days: Number($('target_days').value || 30)
+        };
+        const r = await call('/api/admin/clients/renew', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!r.ok) {
+          setMsg($('clientMsg'), 'Falha ao renovar. Verifique o client_id e a chave.', 'bad');
+          return;
+        }
+        const data = await r.json();
+        setMsg($('clientMsg'), `Renovado. Expira: ${data.expires_at}`, 'ok');
+        await refreshMetrics();
+        await listCodes();
+      }
+
+      async function changePlan(plan) {
+        setMsg($('clientMsg'), 'Atualizando plano...', null);
+        const payload = {
+          client_id: $('target_client_id').value.trim(),
+          plan
+        };
+        const r = await call('/api/admin/clients/plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!r.ok) {
+          setMsg($('clientMsg'), 'Falha ao mudar plano. Verifique o client_id e a chave.', 'bad');
+          return;
+        }
+        const data = await r.json();
+        setMsg($('clientMsg'), `Plano atualizado para ${data.plan}. Memória padrão: ${data.memory_max_messages}`, 'ok');
+        await refreshMetrics();
+      }
+
+      async function genForClient() {
+        setMsg($('clientMsg'), 'Gerando código...', null);
+        const payload = {
+          client_id: $('target_client_id').value.trim(),
+          days: Number($('target_days').value || 30)
+        };
+        const r = await call('/api/admin/codes/for-client', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!r.ok) {
+          setMsg($('clientMsg'), 'Falha ao gerar código para o cliente. Verifique o client_id e a chave.', 'bad');
+          return;
+        }
+        const data = await r.json();
+        setMsg($('clientMsg'), `Novo código: ${data.code} | Expira: ${data.expires_at}`, 'ok');
+        await refreshMetrics();
+        await listCodes();
+      }
+
+      $('refreshBtn').addEventListener('click', () => refreshMetrics().catch(() => {}));
+      $('genBtn').addEventListener('click', () => genCode().catch(() => {}));
+      $('listBtn').addEventListener('click', () => listCodes().catch(() => {}));
+
+      $('renewBtn').addEventListener('click', () => renewClient().catch(() => setMsg($('clientMsg'), 'Falha ao renovar.', 'bad')));
+      $('toBasicBtn').addEventListener('click', () => changePlan('basic').catch(() => setMsg($('clientMsg'), 'Falha ao mudar plano.', 'bad')));
+      $('toProBtn').addEventListener('click', () => changePlan('pro').catch(() => setMsg($('clientMsg'), 'Falha ao mudar plano.', 'bad')));
+      $('genForClientBtn').addEventListener('click', () => genForClient().catch(() => setMsg($('clientMsg'), 'Falha ao gerar código.', 'bad')));
+
+      refreshMetrics().catch(() => {});
+    </script>
+  </body>
+</html>

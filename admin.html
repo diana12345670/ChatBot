@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Painel do Bot WhatsApp</title>
+    <style>
+      :root { color-scheme: light; }
+      body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; background: #0b1220; color: #e6e8ee; }
+      .container { max-width: 980px; margin: 0 auto; padding: 32px 18px 64px; }
+      .card { background: #111a2e; border: 1px solid #223055; border-radius: 14px; padding: 18px; margin: 14px 0; }
+      h1 { font-size: 22px; margin: 0 0 6px; }
+      p { margin: 8px 0; color: #b7c0d6; line-height: 1.45; }
+      label { display: block; font-weight: 650; margin: 12px 0 6px; color: #d9def0; }
+      input, textarea, select { width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 10px; border: 1px solid #2a3a66; background: #0b1220; color: #e6e8ee; }
+      textarea { min-height: 110px; resize: vertical; }
+      .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      @media (max-width: 760px) { .row { grid-template-columns: 1fr; } }
+      .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+      button { cursor: pointer; border: 1px solid #2f4aa0; background: #1b3a9a; color: white; padding: 10px 14px; border-radius: 10px; font-weight: 650; }
+      button.secondary { background: transparent; border-color: #2a3a66; color: #d9def0; }
+      .note { font-size: 13px; color: #b7c0d6; }
+      .success { color: #6ee7b7; }
+      .error { color: #fca5a5; }
+      code { background: #0b1220; border: 1px solid #223055; padding: 2px 6px; border-radius: 6px; }
+      a { color: #93c5fd; }
+      .muted { color: #94a3b8; }
+      .footer { margin-top: 18px; font-size: 12px; color: #93a3c7; }
+      .warning { border-left: 4px solid #fbbf24; padding-left: 12px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="card">
+        <h1>Painel do Bot (WhatsApp + IA)</h1>
+        <p class="warning">
+          Este painel está <b>sem senha</b>. Qualquer pessoa com o link pode ver/alterar as configurações.
+          Use apenas em ambiente privado, ou adicione uma senha depois.
+        </p>
+        <p class="note">Configurações são salvas em <code>config.json</code> dentro do serviço (pode resetar se o container reiniciar).</p>
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 6px;">Configuração do comportamento</h2>
+        <label for="system_prompt">Prompt (como a IA deve agir)</label>
+        <textarea id="system_prompt" placeholder="Ex: Você é um atendente da minha empresa... responda curto e direto."></textarea>
+
+        <div class="row">
+          <div>
+            <label for="memory_max">Memória (máx. mensagens)</label>
+            <input id="memory_max" type="number" min="0" step="1" />
+            <div class="note">Conta mensagens do usuário + do assistente. Default: 10.</div>
+          </div>
+          <div>
+            <label for="graph_version">Versão do Graph API</label>
+            <input id="graph_version" type="text" placeholder="v20.0" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 6px;">Variáveis do WhatsApp (Cloud API)</h2>
+        <div class="row">
+          <div>
+            <label for="whatsapp_token">WHATSAPP_TOKEN</label>
+            <input id="whatsapp_token" type="password" placeholder="EAAG..." />
+          </div>
+          <div>
+            <label for="phone_number_id">WHATSAPP_PHONE_NUMBER_ID</label>
+            <input id="phone_number_id" type="text" placeholder="1234567890" />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label for="verify_token">WHATSAPP_VERIFY_TOKEN</label>
+            <input id="verify_token" type="text" placeholder="um-texto-qualquer" />
+            <div class="note">Você escolhe esse valor e coloca igual na configuração do webhook na Meta.</div>
+          </div>
+          <div>
+            <label for="webhook_url">URL do Webhook</label>
+            <input id="webhook_url" type="text" readonly />
+            <div class="note">Use esta URL como Callback URL no painel da Meta.</div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="saveBtn">Salvar</button>
+          <button id="reloadBtn" class="secondary">Recarregar</button>
+          <span id="status" class="note"></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2 style="margin:0 0 6px;">Tutorial: como pegar as variáveis</h2>
+        <p class="muted">Abaixo está um passo-a-passo e links. Se você me mandar os links do YouTube que prefere, eu substituo aqui.</p>
+
+        <h3 style="margin:14px 0 6px;">1) Criar app na Meta e ativar WhatsApp</h3>
+        <p>Crie um app no <a href="https://developers.facebook.com/" target="_blank" rel="noreferrer">Meta for Developers</a> e adicione o produto <b>WhatsApp</b>.</p>
+        <p class="note">YouTube (placeholder): <a href="https://www.youtube.com/results?search_query=whatsapp+cloud+api+meta+setup" target="_blank" rel="noreferrer">buscar tutorial</a></p>
+
+        <h3 style="margin:14px 0 6px;">2) Pegar o Phone Number ID</h3>
+        <p>No painel do WhatsApp Cloud API, encontre o <b>Phone number ID</b> (você vai colar em <code>WHATSAPP_PHONE_NUMBER_ID</code>).</p>
+        <p class="note">YouTube (placeholder): <a href="https://www.youtube.com/results?search_query=phone+number+id+whatsapp+cloud+api" target="_blank" rel="noreferrer">buscar tutorial</a></p>
+
+        <h3 style="margin:14px 0 6px;">3) Gerar token de acesso</h3>
+        <p>Gere o token (de preferência long-lived) e cole em <code>WHATSAPP_TOKEN</code>.</p>
+        <p class="note">YouTube (placeholder): <a href="https://www.youtube.com/results?search_query=whatsapp+cloud+api+permanent+token" target="_blank" rel="noreferrer">buscar tutorial</a></p>
+
+        <h3 style="margin:14px 0 6px;">4) Configurar webhook</h3>
+        <p>Em Webhooks, informe:</p>
+        <p class="note">
+          Callback URL: <code id="webhook_url_inline"></code><br />
+          Verify token: <code>WHATSAPP_VERIFY_TOKEN</code>
+        </p>
+        <p>Assine o evento <b>messages</b>.</p>
+
+        <div class="footer">
+          Dica: Depois de salvar aqui, reinicie o serviço no Railway se necessário.
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const el = (id) => document.getElementById(id);
+
+      function setStatus(msg, kind) {
+        const s = el('status');
+        s.textContent = msg || '';
+        s.classList.remove('success', 'error');
+        if (kind) s.classList.add(kind);
+      }
+
+      async function loadConfig() {
+        setStatus('Carregando...', null);
+        const r = await fetch('/api/config');
+        const data = await r.json();
+
+        el('system_prompt').value = data.system_prompt || '';
+        el('memory_max').value = data.memory_max_messages ?? 10;
+        el('graph_version').value = data.whatsapp_graph_version || 'v20.0';
+
+        el('whatsapp_token').value = data.whatsapp_token || '';
+        el('phone_number_id').value = data.whatsapp_phone_number_id || '';
+        el('verify_token').value = data.whatsapp_verify_token || '';
+
+        const webhookUrl = window.location.origin + '/webhook';
+        el('webhook_url').value = webhookUrl;
+        el('webhook_url_inline').textContent = webhookUrl;
+
+        setStatus('OK', 'success');
+      }
+
+      async function saveConfig() {
+        setStatus('Salvando...', null);
+        const payload = {
+          system_prompt: el('system_prompt').value,
+          memory_max_messages: Number(el('memory_max').value || 10),
+          whatsapp_graph_version: el('graph_version').value || 'v20.0',
+          whatsapp_token: el('whatsapp_token').value,
+          whatsapp_phone_number_id: el('phone_number_id').value,
+          whatsapp_verify_token: el('verify_token').value,
+        };
+
+        const r = await fetch('/api/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (!r.ok) {
+          const t = await r.text();
+          setStatus('Erro ao salvar: ' + t, 'error');
+          return;
+        }
+
+        setStatus('Salvo!', 'success');
+      }
+
+      el('saveBtn').addEventListener('click', () => saveConfig().catch(e => setStatus(String(e), 'error')));
+      el('reloadBtn').addEventListener('click', () => loadConfig().catch(e => setStatus(String(e), 'error')));
+
+      loadConfig().catch(e => setStatus(String(e), 'error'));
+    </script>
+  </body>
+</html>

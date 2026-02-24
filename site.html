@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ChatBot WhatsApp</title>
+    <style>
+      :root {
+        --bg: #f7fbff;
+        --card: rgba(255, 255, 255, 0.9);
+        --stroke: rgba(15, 35, 80, 0.12);
+        --text: #0b1b3a;
+        --muted: rgba(11, 27, 58, 0.65);
+        --blue: #0b61ff;
+        --blue2: #1b90ff;
+        --shadow: 0 18px 55px rgba(10, 25, 60, 0.15);
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+        color: var(--text);
+        background:
+          radial-gradient(900px 500px at 10% 10%, rgba(11, 97, 255, 0.18), transparent 60%),
+          radial-gradient(900px 500px at 90% 0%, rgba(27, 144, 255, 0.14), transparent 55%),
+          radial-gradient(900px 500px at 70% 90%, rgba(11, 97, 255, 0.10), transparent 55%),
+          linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+      }
+
+      .container { max-width: 1100px; margin: 0 auto; padding: 22px 18px 70px; }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 12px 14px;
+        border: 1px solid var(--stroke);
+        border-radius: 16px;
+        background: rgba(255,255,255,0.7);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 30px rgba(10,25,60,0.08);
+        position: sticky;
+        top: 14px;
+        z-index: 5;
+      }
+
+      .brand { display: flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: 0.2px; }
+      .logo {
+        width: 34px;
+        height: 34px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, var(--blue) 0%, var(--blue2) 100%);
+        box-shadow: 0 12px 24px rgba(11,97,255,0.25);
+      }
+
+      .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+      .tab {
+        border: 1px solid transparent;
+        background: transparent;
+        color: rgba(11, 27, 58, 0.75);
+        padding: 10px 12px;
+        border-radius: 12px;
+        font-weight: 650;
+        cursor: pointer;
+      }
+      .tab.active {
+        background: rgba(11,97,255,0.10);
+        border-color: rgba(11,97,255,0.22);
+        color: var(--text);
+      }
+
+      .hero {
+        margin-top: 18px;
+        border: 1px solid var(--stroke);
+        border-radius: 22px;
+        background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.65));
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        position: relative;
+      }
+      .hero-inner { padding: 26px 22px; display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 18px; }
+      @media (max-width: 900px) { .hero-inner { grid-template-columns: 1fr; } }
+
+      .headline { font-size: 34px; line-height: 1.08; margin: 0 0 10px; letter-spacing: -0.6px; }
+      .sub { margin: 0; color: var(--muted); line-height: 1.55; font-size: 15px; }
+
+      .cta {
+        margin-top: 16px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .btn {
+        border: 1px solid rgba(11,97,255,0.22);
+        background: linear-gradient(135deg, var(--blue) 0%, var(--blue2) 100%);
+        color: white;
+        padding: 11px 14px;
+        border-radius: 14px;
+        font-weight: 750;
+        cursor: pointer;
+        box-shadow: 0 12px 30px rgba(11,97,255,0.22);
+      }
+      .btn.secondary {
+        background: rgba(255,255,255,0.75);
+        color: var(--text);
+        border-color: var(--stroke);
+        box-shadow: none;
+      }
+
+      .card {
+        border: 1px solid var(--stroke);
+        border-radius: 18px;
+        background: rgba(255,255,255,0.8);
+        padding: 16px;
+      }
+
+      .grid { margin-top: 14px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+      .k { font-size: 13px; color: var(--muted); margin: 0 0 6px; }
+      .v { font-size: 15px; margin: 0; font-weight: 750; }
+
+      section { display: none; }
+      section.active { display: block; }
+
+      .pricing { margin-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+      @media (max-width: 900px) { .pricing { grid-template-columns: 1fr; } }
+
+      .plan {
+        border: 1px solid var(--stroke);
+        border-radius: 20px;
+        background: rgba(255,255,255,0.82);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+      .plan .top {
+        padding: 18px;
+        background: linear-gradient(135deg, rgba(11,97,255,0.12), rgba(27,144,255,0.06));
+        border-bottom: 1px solid var(--stroke);
+      }
+      .plan h3 { margin: 0 0 6px; }
+      .price { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; }
+      .per { color: var(--muted); font-size: 13px; }
+      .plan .body { padding: 16px 18px; }
+      .feat { margin: 0; padding-left: 18px; color: rgba(11,27,58,0.85); }
+      .feat li { margin: 10px 0; }
+
+      .login {
+        margin-top: 18px;
+        border: 1px solid var(--stroke);
+        border-radius: 22px;
+        background: rgba(255,255,255,0.85);
+        box-shadow: var(--shadow);
+        padding: 18px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      @media (max-width: 900px) { .login { grid-template-columns: 1fr; } }
+
+      label { display: block; font-weight: 750; margin: 10px 0 6px; }
+      input, textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid rgba(15,35,80,0.18);
+        border-radius: 14px;
+        background: rgba(255,255,255,0.9);
+        color: var(--text);
+        outline: none;
+      }
+      textarea { min-height: 110px; resize: vertical; }
+
+      .msg { font-size: 13px; color: var(--muted); min-height: 18px; }
+      .msg.ok { color: #0f766e; }
+      .msg.bad { color: #b91c1c; }
+
+      .footer { margin-top: 16px; font-size: 12px; color: var(--muted); }
+      code { background: rgba(11,97,255,0.08); border: 1px solid rgba(11,97,255,0.18); padding: 2px 6px; border-radius: 10px; }
+      .contact { font-weight: 850; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="nav">
+        <div class="brand"><div class="logo"></div><div>ChatBot WhatsApp</div></div>
+        <div class="tabs">
+          <button class="tab active" data-tab="home">Home</button>
+          <button class="tab" data-tab="pricing">Preços</button>
+          <button class="tab" data-tab="login">Login</button>
+        </div>
+      </div>
+
+      <section id="home" class="active">
+        <div class="hero">
+          <div class="hero-inner">
+            <div>
+              <h1 class="headline">Atendimento no WhatsApp com IA, do jeito certo.</h1>
+              <p class="sub">
+                Você recebe mensagens no WhatsApp e a IA responde automaticamente com contexto.
+                O comportamento pode ser personalizado por prompt e o sistema opera por assinatura.
+              </p>
+              <div class="cta">
+                <button class="btn" data-goto="pricing">Ver planos</button>
+                <button class="btn secondary" data-goto="login">Entrar</button>
+              </div>
+              <div class="footer">
+                Para solicitar seu chatbot, entre em contato com <span class="contact">+55 71 996086559</span>.
+              </div>
+            </div>
+            <div>
+              <div class="card">
+                <p class="k">Como funciona</p>
+                <p class="v">1) Você conecta o WhatsApp</p>
+                <p class="v">2) Define o prompt</p>
+                <p class="v">3) Publica o webhook</p>
+              </div>
+              <div class="grid">
+                <div class="card"><p class="k">Webhooks</p><p class="v">Recebimento e resposta</p></div>
+                <div class="card"><p class="k">Memória</p><p class="v">Contexto por conversa</p></div>
+                <div class="card"><p class="k">Railway</p><p class="v">Hospedagem pronta</p></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing">
+        <div class="pricing">
+          <div class="plan">
+            <div class="top">
+              <h3>Plano Básico</h3>
+              <div class="price">69,99</div>
+              <div class="per">mensal</div>
+            </div>
+            <div class="body">
+              <ul class="feat">
+                <li>Memória de até 15 mensagens</li>
+                <li>Prompt personalizado</li>
+                <li>Linguagem humanizada</li>
+              </ul>
+              <div class="footer">Para ativar, solicite um código de acesso.</div>
+            </div>
+          </div>
+
+          <div class="plan">
+            <div class="top">
+              <h3>Plano Pro</h3>
+              <div class="price">159,99</div>
+              <div class="per">mensal</div>
+            </div>
+            <div class="body">
+              <ul class="feat">
+                <li>Memória de até 30 mensagens</li>
+                <li>Lembra o nome do usuário e se adapta à conversa</li>
+                <li>Linguagem ultra humanizada</li>
+                <li>Criação de lembretes</li>
+                <li>Suporte a áudio e foto (quando habilitado)</li>
+              </ul>
+              <div class="footer">Para ativar, solicite um código de acesso.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px;">
+          <p class="k">Contato</p>
+          <p class="v">+55 71 996086559</p>
+          <p class="sub">Envie uma mensagem para receber instruções e ativação do seu plano.</p>
+        </div>
+      </section>
+
+      <section id="login">
+        <div class="login">
+          <div>
+            <h2 style="margin:0 0 6px; letter-spacing:-0.4px;">Acesso</h2>
+            <p class="sub">Entre com o seu código de acesso. O painel de controle fica disponível após o login.</p>
+
+            <label for="code">Código</label>
+            <input id="code" type="password" placeholder="Insira seu código" />
+
+            <div class="cta">
+              <button class="btn" id="loginBtn">Entrar</button>
+              <button class="btn secondary" id="logoutBtn">Sair</button>
+            </div>
+            <div id="loginMsg" class="msg"></div>
+
+            <div class="footer">
+              Se o seu plano expirar, este acesso será bloqueado até resgatar um novo código.
+            </div>
+          </div>
+
+          <div>
+            <div class="card">
+              <h3 style="margin:0 0 8px;">Painel de controle</h3>
+              <p class="sub" style="margin-top:0;">Configure WhatsApp e o prompt do atendimento.</p>
+
+              <div id="panelLocked" class="msg bad">Faça login para acessar.</div>
+              <div id="panelExpired" class="msg bad" style="display:none;">Seu plano expirou. Por favor resgate um novo código para continuar usando nosso chat bot.</div>
+
+              <div id="panel" style="display:none;">
+                <label for="system_prompt">Prompt</label>
+                <textarea id="system_prompt" placeholder="Defina o comportamento do assistente"></textarea>
+
+                <label for="whatsapp_token">WHATSAPP_TOKEN</label>
+                <input id="whatsapp_token" type="password" />
+
+                <label for="phone_number_id">WHATSAPP_PHONE_NUMBER_ID</label>
+                <input id="phone_number_id" type="text" />
+
+                <label for="verify_token">WHATSAPP_VERIFY_TOKEN</label>
+                <input id="verify_token" type="text" />
+
+                <label for="graph_version">WHATSAPP_GRAPH_VERSION</label>
+                <input id="graph_version" type="text" placeholder="v20.0" />
+
+                <label for="memory_max">Memória (máx. mensagens)</label>
+                <input id="memory_max" type="number" min="0" step="1" />
+
+                <div class="cta" style="margin-top:12px;">
+                  <button class="btn" id="saveBtn">Salvar</button>
+                  <button class="btn secondary" id="reloadBtn">Recarregar</button>
+                </div>
+                <div id="cfgMsg" class="msg"></div>
+
+                <div class="footer">
+                  Webhook: <code id="webhookUrl"></code>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top:12px;">
+              <p class="k">Tutorial</p>
+              <p class="sub">O tutorial detalhado ficará disponível aqui. Você pode substituir os links quando quiser.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const $ = (id) => document.getElementById(id);
+
+      function showTab(tab) {
+        document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        $(tab).classList.add('active');
+        document.querySelector(`.tab[data-tab="${tab}"]`).classList.add('active');
+      }
+
+      document.querySelectorAll('.tab').forEach(btn => {
+        btn.addEventListener('click', () => showTab(btn.dataset.tab));
+      });
+
+      document.querySelectorAll('[data-goto]').forEach(btn => {
+        btn.addEventListener('click', () => showTab(btn.dataset.goto));
+      });
+
+      function setMsg(el, msg, kind) {
+        el.textContent = msg || '';
+        el.classList.remove('ok', 'bad');
+        if (kind) el.classList.add(kind);
+      }
+
+      async function refreshMe() {
+        const r = await fetch('/api/me');
+        const me = await r.json();
+
+        const webhookUrl = window.location.origin + '/webhook';
+        $('webhookUrl').textContent = webhookUrl;
+
+        if (!me.authenticated) {
+          $('panel').style.display = 'none';
+          $('panelExpired').style.display = 'none';
+          $('panelLocked').style.display = 'block';
+          $('panelLocked').textContent = 'Faça login para acessar.';
+          return;
+        }
+
+        if (!me.active) {
+          $('panel').style.display = 'none';
+          $('panelLocked').style.display = 'none';
+          $('panelExpired').style.display = 'block';
+          return;
+        }
+
+        $('panelExpired').style.display = 'none';
+        $('panelLocked').style.display = 'none';
+        $('panel').style.display = 'block';
+        await loadConfig();
+      }
+
+      async function login() {
+        const code = $('code').value;
+        const r = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code })
+        });
+
+        if (!r.ok) {
+          const t = await r.text();
+          if (t.includes('expired_code')) {
+            setMsg($('loginMsg'), 'Seu código expirou. Solicite um novo código.', 'bad');
+          } else {
+            setMsg($('loginMsg'), 'Código inválido.', 'bad');
+          }
+          await refreshMe();
+          return;
+        }
+
+        setMsg($('loginMsg'), 'Acesso liberado.', 'ok');
+        await refreshMe();
+      }
+
+      async function logout() {
+        await fetch('/api/logout', { method: 'POST' });
+        setMsg($('loginMsg'), 'Sessão encerrada.', 'ok');
+        await refreshMe();
+      }
+
+      async function loadConfig() {
+        setMsg($('cfgMsg'), 'Carregando...', null);
+        const r = await fetch('/api/client/config');
+        if (!r.ok) {
+          const t = await r.text();
+          if (t.includes('plan_expired')) {
+            $('panel').style.display = 'none';
+            $('panelLocked').style.display = 'none';
+            $('panelExpired').style.display = 'block';
+          }
+          setMsg($('cfgMsg'), 'Não foi possível carregar as configurações.', 'bad');
+          return;
+        }
+        const data = await r.json();
+        $('system_prompt').value = data.system_prompt || '';
+        $('whatsapp_token').value = data.whatsapp_token || '';
+        $('phone_number_id').value = data.whatsapp_phone_number_id || '';
+        $('verify_token').value = data.whatsapp_verify_token || '';
+        $('graph_version').value = data.whatsapp_graph_version || 'v20.0';
+        $('memory_max').value = data.memory_max_messages ?? 10;
+        setMsg($('cfgMsg'), 'OK', 'ok');
+      }
+
+      async function saveConfig() {
+        setMsg($('cfgMsg'), 'Salvando...', null);
+        const payload = {
+          system_prompt: $('system_prompt').value,
+          whatsapp_token: $('whatsapp_token').value,
+          whatsapp_phone_number_id: $('phone_number_id').value,
+          whatsapp_verify_token: $('verify_token').value,
+          whatsapp_graph_version: $('graph_version').value || 'v20.0',
+          memory_max_messages: Number($('memory_max').value || 10),
+        };
+        const r = await fetch('/api/client/config', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!r.ok) {
+          const t = await r.text();
+          if (t.includes('plan_expired')) {
+            $('panel').style.display = 'none';
+            $('panelLocked').style.display = 'none';
+            $('panelExpired').style.display = 'block';
+            return;
+          }
+          setMsg($('cfgMsg'), 'Erro ao salvar.', 'bad');
+          return;
+        }
+        setMsg($('cfgMsg'), 'Salvo.', 'ok');
+      }
+
+      $('loginBtn').addEventListener('click', () => login().catch(() => setMsg($('loginMsg'), 'Falha no login.', 'bad')));
+      $('logoutBtn').addEventListener('click', () => logout().catch(() => setMsg($('loginMsg'), 'Falha ao sair.', 'bad')));
+      $('reloadBtn').addEventListener('click', () => loadConfig().catch(() => setMsg($('cfgMsg'), 'Falha ao recarregar.', 'bad')));
+      $('saveBtn').addEventListener('click', () => saveConfig().catch(() => setMsg($('cfgMsg'), 'Falha ao salvar.', 'bad')));
+
+      refreshMe().catch(() => {});
+    </script>
+  </body>
+</html>
