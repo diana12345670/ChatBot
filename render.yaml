@@ -1,0 +1,38 @@
+services:
+  # Web Service
+  - type: web
+    name: whatsapp-bot
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "uvicorn main:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: ADMIN_MASTER_KEY
+        value: ABEL2011
+      - key: WHATSAPP_VERIFY_TOKEN
+        sync: false
+      - key: MAX_ACCOUNTS
+        value: 20
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: LOG_LEVEL
+        value: INFO
+      - key: COOKIE_SECURE
+        value: true
+      - key: CONFIG_PATH
+        value: /tmp/storage.json
+
+# Health check configuration
+healthCheckPath: /health
+
+# Auto-deploy configuration
+autoDeploy: true
+
+# Region configuration (optional)
+region: oregon

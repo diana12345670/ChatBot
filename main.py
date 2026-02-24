@@ -25,7 +25,9 @@ logging.basicConfig(level=os.environ.get("LOG_LEVEL", "INFO"))
 
 
 # Persisted storage (best-effort). On some Railway deployments, filesystem may reset.
-_STORAGE_PATH = Path(os.environ.get("CONFIG_PATH", "storage.json"))
+# For Render, use /tmp directory for persistent storage
+default_path = "/tmp/storage.json" if os.environ.get("RENDER") else "storage.json"
+_STORAGE_PATH = Path(os.environ.get("CONFIG_PATH", default_path))
 
 
 def _load_storage() -> dict:
@@ -565,6 +567,11 @@ async def admin_create_code_for_client(request: Request):
     }
     _ensure_storage_saved()
     return {"ok": True, "code": code, "client_id": client_id, "expires_at": _dt_to_str(expires_at), "plan": client.get("plan")}
+
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "service": "whatsapp-bot"}
 
 
 @app.get("/webhook")
