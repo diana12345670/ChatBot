@@ -569,6 +569,12 @@
       }
       .form-section {
         margin-bottom: 24px;
+        transition: all 0.3s ease;
+      }
+      .form-section.hidden {
+        opacity: 0.5;
+        transform: scale(0.95);
+        pointer-events: none;
       }
       .form-section h3 {
         margin: 0 0 16px;
@@ -681,6 +687,119 @@
         color: var(--text);
         border: 1px solid var(--stroke);
       }
+
+      /* Icon Styles */
+      .icon-lock::before {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 24px;
+        border: 3px solid var(--blue);
+        border-radius: 4px;
+        background: linear-gradient(135deg, var(--blue) 0%, var(--blue2) 100%);
+      }
+      .icon-dashboard::before {
+        content: '';
+        position: absolute;
+        width: 24px;
+        height: 20px;
+        background: linear-gradient(135deg, var(--blue) 0%, var(--blue2) 100%);
+        border-radius: 4px;
+        box-shadow: inset 0 2px 0 rgba(255,255,255,0.3);
+      }
+      .icon-clock::before {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--blue);
+        border-radius: 50%;
+        background: conic-gradient(from 0deg, var(--blue) 0%, transparent 25%, var(--blue) 50%, transparent 75%, var(--blue) 100%);
+      }
+      .icon-gear::before {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border: 2px solid var(--blue);
+        border-radius: 50%;
+        background: conic-gradient(from 45deg, var(--blue) 0%, transparent 30%, var(--blue) 60%, transparent 90%, var(--blue) 120%, transparent 150%, var(--blue) 180%, transparent 210%, var(--blue) 240%, transparent 270%, var(--blue) 300%, transparent 330%, var(--blue) 360%);
+      }
+      .icon-link::before {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        background: linear-gradient(135deg, var(--blue) 0%, var(--blue2) 100%);
+        border-radius: 50%;
+        box-shadow: 0 0 0 4px rgba(11,97,255,0.3);
+      }
+      .icon-list::before {
+        content: '';
+        position: absolute;
+        width: 18px;
+        height: 14px;
+        background: var(--blue);
+        border-radius: 2px;
+        box-shadow: 0 2px 0 rgba(11,97,255,0.2);
+      }
+      .icon-video::before {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-bottom: 12px solid var(--blue);
+        border-radius: 0 0 4px 4px;
+      }
+      .icon-play::before {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-bottom: 10px solid var(--blue);
+        border-radius: 0 0 2px 2px;
+        transform: rotate(-90deg);
+      }
+      .icon-key::before {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 8px;
+        background: var(--blue);
+        border-radius: 2px;
+        box-shadow: 0 2px 0 rgba(11,97,255,0.3);
+      }
+      .icon-phone::before {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border: 2px solid var(--blue);
+        border-radius: 8px 8px 2px 8px;
+        background: transparent;
+      }
+      .icon-check::before {
+        content: '';
+        position: absolute;
+        width: 12px;
+        height: 8px;
+        background: var(--blue);
+        clip-path: polygon(0 0, 100% 0, 100% 50%, 40% 100%, 0 40%);
+      }
+      .icon-file::before {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 20px;
+        background: var(--blue);
+        border-radius: 2px;
+        box-shadow: 0 2px 0 rgba(11,97,255,0.2);
+      }
+
       @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
@@ -839,16 +958,15 @@
                 <div class="author-info">
                   <div class="author-name">Pedro Costa</div>
                   <div class="webhook-info">
-                <h5>🔗 Webhook URL</h5>
+                <h5><span class="icon-link"></span> Webhook URL</h5>
                 <code id="webhookUrl"></code>
               </div>
             </div>
-
             <div class="tutorial-section">
-              <h4>📋 Tutorial Completo</h4>
+              <h4><span class="icon-file"></span> Tutorial Completo</h4>
               <div class="tutorial-content">
                 <div class="tutorial-subsection">
-                  <h5>📋 Requisitos</h5>
+                  <h5><span class="icon-list"></span> Requisitos</h5>
                   <ul class="tutorial-list">
                     <li>Conta WhatsApp Business verificada</li>
                     <li>Número de telefone com WhatsApp Business</li>
@@ -863,13 +981,13 @@
                     <h4>Criar App no Meta for Developers</h4>
                     <p>Acesse o site oficial do Meta e crie seu aplicativo WhatsApp.</p>
                     <a href="https://developers.facebook.com/apps" target="_blank" class="tutorial-link">
-                      <span class="link-icon">🔗</span>
+                      <span class="icon-link"></span>
                       <span>developers.facebook.com/apps</span>
                     </a>
                     <div class="video-tutorial">
-                      <h5>📹 Vídeo Tutorial</h5>
+                      <h5><span class="icon-video"></span> Vídeo Tutorial</h5>
                       <a href="#" class="video-link" onclick="alert('Em breve: Vídeo completo de criação de App Meta')">
-                        <span class="play-icon">▶️</span>
+                        <span class="icon-play"></span>
                         Como criar App WhatsApp do zero
                       </a>
                     </div>
@@ -892,9 +1010,9 @@
                       </div>
                     </div>
                     <div class="video-tutorial">
-                      <h5>📹 Vídeo Tutorial</h5>
+                      <h5><span class="icon-video"></span> Vídeo Tutorial</h5>
                       <a href="#" class="video-link" onclick="alert('Em breve: Vídeo completo de configuração WhatsApp API')">
-                        <span class="play-icon">▶️</span>
+                        <span class="icon-play"></span>
                         Configurar WhatsApp Business API
                       </a>
                     </div>
@@ -908,18 +1026,18 @@
                     <p>Gere as credenciais necessárias no painel do Meta.</p>
                     <div class="tokens-guide">
                       <div class="token-item">
-                        <h5>🔑 WHATSAPP_TOKEN</h5>
+                        <h5><span class="icon-key"></span> WHATSAPP_TOKEN</h5>
                         <p>Token de acesso permanente para enviar mensagens</p>
                         <a href="#" class="video-link" onclick="alert('Em breve: Vídeo de como gerar Permanent Token')">
-                          <span class="play-icon">▶️</span>
+                          <span class="icon-play"></span>
                           Vídeo: Gerar Permanent Token
                         </a>
                       </div>
                       <div class="token-item">
-                        <h5>📞 PHONE_NUMBER_ID</h5>
+                        <h5><span class="icon-phone"></span> PHONE_NUMBER_ID</h5>
                         <p>ID do seu número de telefone WhatsApp</p>
                         <a href="#" class="video-link" onclick="alert('Em breve: Vídeo de como encontrar Phone Number ID')">
-                          <span class="play-icon">▶️</span>
+                          <span class="icon-play"></span>
                           Vídeo: Encontrar Phone ID
                         </a>
                       </div>
@@ -940,7 +1058,7 @@
                       <div class="setup-item">
                         <span class="setup-label">2. Cole em:</span>
                         <a href="https://developers.facebook.com/apps" target="_blank" class="tutorial-link">
-                          <span class="link-icon">🔗</span>
+                          <span class="icon-link"></span>
                           Meta for Developers → WhatsApp → Configuration
                         </a>
                       </div>
@@ -963,13 +1081,13 @@
                     <p>Obtenha sua chave API da OpenAI para alimentar a IA.</p>
                     <div class="openai-guide">
                       <a href="https://platform.openai.com/api-keys" target="_blank" class="tutorial-link">
-                        <span class="link-icon">🔗</span>
+                        <span class="icon-link"></span>
                         <span>platform.openai.com/api-keys</span>
                       </a>
                       <div class="video-tutorial">
-                        <h5>📹 Vídeo Tutorial</h5>
+                        <h5><span class="icon-video"></span> Vídeo Tutorial</h5>
                         <a href="#" class="video-link" onclick="alert('Em breve: Vídeo completo de configuração OpenAI')">
-                          <span class="play-icon">▶️</span>
+                          <span class="icon-play"></span>
                           Como criar chave API OpenAI
                         </a>
                       </div>
@@ -983,14 +1101,14 @@
                     <h4>Finalizar Configuração</h4>
                     <p>Preencha todos os campos no painel acima e ative seu chatbot.</p>
                     <div class="final-checklist">
-                      <h5>✅ Checklist Final:</h5>
+                      <h5><span class="icon-check"></span> Checklist Final:</h5>
                       <ul class="checklist">
-                        <li>✓ WHATSAPP_TOKEN configurado</li>
-                        <li>✓ PHONE_NUMBER_ID preenchido</li>
-                        <li>✓ Webhook verificado no Meta</li>
-                        <li>✓ Prompt personalizado</li>
-                        <li>✓ OpenAI API Key ativa</li>
-                        <li>✓ Teste de mensagem enviado</li>
+                        <li><span class="icon-check"></span> WHATSAPP_TOKEN configurado</li>
+                        <li><span class="icon-check"></span> PHONE_NUMBER_ID preenchido</li>
+                        <li><span class="icon-check"></span> Webhook verificado no Meta</li>
+                        <li><span class="icon-check"></span> Prompt personalizado</li>
+                        <li><span class="icon-check"></span> OpenAI API Key ativa</li>
+                        <li><span class="icon-check"></span> Teste de mensagem enviado</li>
                       </ul>
                     </div>
                   </div>
@@ -1084,25 +1202,25 @@
 
         <div class="dashboard-card">
           <div class="card-header">
-            <h3>📊 Painel de Controle</h3>
+            <h3><span class="icon-dashboard"></span> Painel de Controle</h3>
             <p>Configure WhatsApp e o prompt do atendimento</p>
           </div>
 
           <div id="panelLocked" class="access-denied">
-            <div class="denied-icon">🔒</div>
-            <h4>Acesso Restrito</h4>
+            <div class="denied-icon"><span class="icon-lock"></span></div>
+            <h3><span class="icon-lock"></span> Acesso ao Sistema</h3>
             <p>Faça login para acessar o painel de configurações.</p>
           </div>
 
           <div id="panelExpired" class="access-denied" style="display:none;">
-            <div class="denied-icon">⏰</div>
+            <div class="denied-icon"><span class="icon-clock"></span></div>
             <h4>Plano Expirado</h4>
             <p>Seu plano expirou. Por favor resgate um novo código para continuar usando nosso chatbot.</p>
           </div>
 
           <div id="panel" class="dashboard-content" style="display:none;">
             <div class="config-section">
-              <h4>⚙️ Configurações do Chatbot</h4>
+              <h4><span class="icon-gear"></span> Configurações do Chatbot</h4>
               
               <div class="form-group">
                 <label for="system_prompt">Prompt do Assistente</label>
@@ -1183,6 +1301,17 @@
           $('panelExpired').style.display = 'none';
           $('panelLocked').style.display = 'block';
           $('panelLocked').textContent = 'Faça login para acessar.';
+          
+          // Show signup form, hide logout button
+          $('signupBtn').style.display = 'block';
+          $('loginBtn').style.display = 'block';
+          $('logoutBtn').style.display = 'none';
+          
+          // Remove hidden class from signup section
+          const signupSection = $('signupBtn').closest('.form-section');
+          if (signupSection) {
+            signupSection.classList.remove('hidden');
+          }
           return;
         }
 
@@ -1190,12 +1319,35 @@
           $('panel').style.display = 'none';
           $('panelLocked').style.display = 'none';
           $('panelExpired').style.display = 'block';
+          
+          // Show signup form, hide logout button
+          $('signupBtn').style.display = 'block';
+          $('loginBtn').style.display = 'block';
+          $('logoutBtn').style.display = 'none';
+          
+          // Remove hidden class from signup section
+          const signupSection = $('signupBtn').closest('.form-section');
+          if (signupSection) {
+            signupSection.classList.remove('hidden');
+          }
           return;
         }
 
         $('panelExpired').style.display = 'none';
         $('panelLocked').style.display = 'none';
         $('panel').style.display = 'block';
+        
+        // Hide signup form, show logout button when authenticated
+        $('signupBtn').style.display = 'none';
+        $('loginBtn').style.display = 'none';
+        $('logoutBtn').style.display = 'block';
+        
+        // Add hidden class to signup section
+        const signupSection = $('signupBtn').closest('.form-section');
+        if (signupSection) {
+          signupSection.classList.add('hidden');
+        }
+        
         await loadConfig();
       }
 
