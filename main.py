@@ -4,6 +4,9 @@ import json
 from pathlib import Path
 import secrets
 from datetime import datetime, timedelta, timezone
+import re
+import hashlib
+import hmac
 from collections import deque
 import requests
 from fastapi import FastAPI, Request, HTTPException, Response
@@ -42,6 +45,10 @@ def _save_storage(storage: dict) -> None:
 _storage: dict = _load_storage()
 _storage.setdefault("login_codes", {})
 _storage.setdefault("clients", {})
+_storage.setdefault("accounts", {})
+
+
+_MAX_ACCOUNTS = int(os.environ.get("MAX_ACCOUNTS", "20"))
 
 
 def _utcnow() -> datetime:
@@ -81,6 +88,33 @@ def _get_client(client_id: str) -> dict | None:
     return (_storage.get("clients") or {}).get(client_id)
 
 
+def _get_account(account_id: str) -> dict | None:
+    return (_storage.get("accounts") or {}).get(account_id)
+
+
+def _find_account_by_email(email: str) -> tuple[str, dict] | None:
+    for aid, acc in ((_storage.get("accounts") or {}).items()):
+        if (acc.get("email") or "").lower() == email.lower():
+            return aid, acc
+    return None
+
+
+def _hash_password(password: str, salt: str | None = None) -> tuple[str, str]:
+    if salt is None:
+        salt = secrets.token_hex(16)
+    dk = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), 120_000)
+    return salt, dk.hex()
+
+
+def _verify_password(password: str, salt: str, pw_hash: str) -> bool:
+    _, h = _hash_password(password, salt=salt)
+    return hmac.compare_digest(h, pw_hash)
+
+
+def _is_valid_email(email: str) -> bool:
+    return bool(re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email or ""))
+
+
 def _is_client_active(client: dict) -> bool:
     exp = _parse_dt(client.get("expires_at"))
     if exp is None:
@@ -96,6 +130,13 @@ def _client_setting(client: dict, key: str, default=None):
 
 def _ensure_storage_saved() -> None:
     _save_storage(_storage)
+
+
+def _is_account_active(acc: dict) -> bool:
+    exp = _parse_dt(acc.get("expires_at"))
+    if exp is None:
+        return True
+    return _utcnow() < exp
 
 
 # Memory is kept in-process. On Railway, redeploy/restart will reset it.
@@ -181,36 +222,97 @@ def admin_home():
     return HTMLResponse(content=html_path.read_text(encoding="utf-8"))
 
 
-def _get_session_client_id(request: Request) -> str | None:
+def _get_session_account_id(request: Request) -> str | None:
     return request.cookies.get("sid")
 
 
-@app.post("/api/login")
-async def login(request: Request, response: Response):
+@app.post("/api/signup")
+async def signup(request: Request, response: Response):
     body = await request.json()
+    email = str(body.get("email") or "").strip().lower()
+    password = str(body.get("password") or "").strip()
     code = str(body.get("code") or "").strip()
+
+    if not _is_valid_email(email):
+        raise HTTPException(status_code=400, detail="invalid_email")
+    if len(password) < 6:
+        raise HTTPException(status_code=400, detail="weak_password")
+    if _find_account_by_email(email):
+        raise HTTPException(status_code=409, detail="email_in_use")
+
+    if len((_storage.get("accounts") or {})) >= _MAX_ACCOUNTS:
+        raise HTTPException(status_code=429, detail="max_accounts_reached")
+
     codes = _storage.get("login_codes") or {}
     record = codes.get(code)
     if not record:
         raise HTTPException(status_code=401, detail="invalid_code")
 
+    code_exp = _parse_dt(record.get("expires_at"))
+    if code_exp is not None and _utcnow() >= code_exp:
+        raise HTTPException(status_code=401, detail="expired_code")
+
     client_id = record.get("client_id")
     if not client_id:
         raise HTTPException(status_code=401, detail="invalid_code")
 
-    exp = _parse_dt(record.get("expires_at"))
-    if exp is not None and _utcnow() >= exp:
-        raise HTTPException(status_code=401, detail="expired_code")
+    client = _get_client(client_id)
+    if not client:
+        raise HTTPException(status_code=401, detail="invalid_code")
 
+    account_id = secrets.token_urlsafe(16)
+    salt, pw_hash = _hash_password(password)
+    now = _utcnow()
+
+    _storage["accounts"][account_id] = {
+        "email": email,
+        "pw_salt": salt,
+        "pw_hash": pw_hash,
+        "client_id": client_id,
+        "plan": client.get("plan"),
+        "created_at": _dt_to_str(now),
+        "expires_at": client.get("expires_at"),
+    }
+
+    # bind client ownership to this account
+    client["account_id"] = account_id
+    _storage["clients"][client_id] = client
+    _ensure_storage_saved()
+
+    cookie_secure = os.environ.get("COOKIE_SECURE", "true").lower() == "true"
     response.set_cookie(
         key="sid",
-        value=client_id,
+        value=account_id,
         httponly=True,
-        secure=True,
+        secure=cookie_secure,
         samesite="lax",
         max_age=60 * 60 * 24 * 400,
     )
-    return {"ok": True, "client_id": client_id}
+    return {"ok": True}
+
+
+@app.post("/api/login")
+async def login(request: Request, response: Response):
+    body = await request.json()
+    email = str(body.get("email") or "").strip().lower()
+    password = str(body.get("password") or "").strip()
+    found = _find_account_by_email(email)
+    if not found:
+        raise HTTPException(status_code=401, detail="invalid_credentials")
+    account_id, acc = found
+    if not _verify_password(password, acc.get("pw_salt") or "", acc.get("pw_hash") or ""):
+        raise HTTPException(status_code=401, detail="invalid_credentials")
+
+    cookie_secure = os.environ.get("COOKIE_SECURE", "true").lower() == "true"
+    response.set_cookie(
+        key="sid",
+        value=account_id,
+        httponly=True,
+        secure=cookie_secure,
+        samesite="lax",
+        max_age=60 * 60 * 24 * 400,
+    )
+    return {"ok": True}
 
 
 @app.post("/api/logout")
@@ -221,38 +323,42 @@ def logout(response: Response):
 
 @app.get("/api/me")
 def me(request: Request):
-    client_id = _get_session_client_id(request)
-    if not client_id:
+    account_id = _get_session_account_id(request)
+    if not account_id:
         return {"authenticated": False}
-    client = _get_client(client_id)
-    if not client:
+    acc = _get_account(account_id)
+    if not acc:
         return {"authenticated": False}
-    active = _is_client_active(client)
+    active = _is_account_active(acc)
     return {
         "authenticated": True,
-        "client_id": client_id,
+        "account_id": account_id,
         "active": active,
-        "plan": client.get("plan"),
-        "expires_at": client.get("expires_at"),
+        "plan": acc.get("plan"),
+        "expires_at": acc.get("expires_at"),
     }
 
 
 @app.get("/api/client/config")
 def get_client_config(request: Request):
-    client_id = _get_session_client_id(request)
-    if not client_id:
+    account_id = _get_session_account_id(request)
+    if not account_id:
         raise HTTPException(status_code=401, detail="not_authenticated")
-    client = _get_client(client_id)
+    acc = _get_account(account_id)
+    if not acc:
+        raise HTTPException(status_code=401, detail="not_authenticated")
+    if not _is_account_active(acc):
+        raise HTTPException(status_code=402, detail="plan_expired")
+
+    client_id = acc.get("client_id")
+    client = _get_client(client_id) if client_id else None
     if not client:
         raise HTTPException(status_code=401, detail="not_authenticated")
-    if not _is_client_active(client):
-        raise HTTPException(status_code=402, detail="plan_expired")
 
     return {
         "system_prompt": _client_setting(client, "SYSTEM_PROMPT", ""),
         "whatsapp_token": _client_setting(client, "WHATSAPP_TOKEN", ""),
         "whatsapp_phone_number_id": _client_setting(client, "WHATSAPP_PHONE_NUMBER_ID", ""),
-        "whatsapp_verify_token": _client_setting(client, "WHATSAPP_VERIFY_TOKEN", ""),
         "whatsapp_graph_version": _client_setting(client, "WHATSAPP_GRAPH_VERSION", "v20.0"),
         "memory_max_messages": int(_client_setting(client, "MEMORY_MAX_MESSAGES", "10")),
         "plan": client.get("plan"),
@@ -262,14 +368,19 @@ def get_client_config(request: Request):
 
 @app.post("/api/client/config")
 async def set_client_config(request: Request):
-    client_id = _get_session_client_id(request)
-    if not client_id:
+    account_id = _get_session_account_id(request)
+    if not account_id:
         raise HTTPException(status_code=401, detail="not_authenticated")
-    client = _get_client(client_id)
+    acc = _get_account(account_id)
+    if not acc:
+        raise HTTPException(status_code=401, detail="not_authenticated")
+    if not _is_account_active(acc):
+        raise HTTPException(status_code=402, detail="plan_expired")
+
+    client_id = acc.get("client_id")
+    client = _get_client(client_id) if client_id else None
     if not client:
         raise HTTPException(status_code=401, detail="not_authenticated")
-    if not _is_client_active(client):
-        raise HTTPException(status_code=402, detail="plan_expired")
 
     body = await request.json()
 
@@ -281,11 +392,16 @@ async def set_client_config(request: Request):
     client["SYSTEM_PROMPT"] = _s(body.get("system_prompt"))
     client["WHATSAPP_TOKEN"] = _s(body.get("whatsapp_token"))
     client["WHATSAPP_PHONE_NUMBER_ID"] = _s(body.get("whatsapp_phone_number_id"))
-    client["WHATSAPP_VERIFY_TOKEN"] = _s(body.get("whatsapp_verify_token"))
     client["WHATSAPP_GRAPH_VERSION"] = _s(body.get("whatsapp_graph_version") or "v20.0")
     client["MEMORY_MAX_MESSAGES"] = str(int(body.get("memory_max_messages") or 10))
 
     _storage["clients"][client_id] = client
+
+    # sync plan and expiry onto account
+    acc["plan"] = client.get("plan")
+    acc["expires_at"] = client.get("expires_at")
+    _storage["accounts"][account_id] = acc
+
     _ensure_storage_saved()
     return {"ok": True}
 
@@ -341,7 +457,6 @@ async def admin_create_code(request: Request):
         "SYSTEM_PROMPT": "",
         "WHATSAPP_TOKEN": "",
         "WHATSAPP_PHONE_NUMBER_ID": "",
-        "WHATSAPP_VERIFY_TOKEN": "",
         "WHATSAPP_GRAPH_VERSION": "v20.0",
     }
 
@@ -385,6 +500,11 @@ async def admin_renew_client(request: Request):
     new_exp = base + timedelta(days=days)
     client["expires_at"] = _dt_to_str(new_exp)
 
+    # sync expiry to account if linked
+    account_id = client.get("account_id")
+    if account_id and _get_account(account_id):
+        _storage["accounts"][account_id]["expires_at"] = client["expires_at"]
+
     _storage["clients"][client_id] = client
     _ensure_storage_saved()
     return {"ok": True, "client_id": client_id, "expires_at": client.get("expires_at")}
@@ -410,6 +530,11 @@ async def admin_change_plan(request: Request):
     existing_memory = str(client.get("MEMORY_MAX_MESSAGES") or "").strip()
     if existing_memory in ("", "10", "15", "30"):
         client["MEMORY_MAX_MESSAGES"] = str(default_memory)
+
+    # sync plan to account if linked
+    account_id = client.get("account_id")
+    if account_id and _get_account(account_id):
+        _storage["accounts"][account_id]["plan"] = plan
 
     _storage["clients"][client_id] = client
     _ensure_storage_saved()

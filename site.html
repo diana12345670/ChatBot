@@ -276,16 +276,34 @@
         <div class="login">
           <div>
             <h2 style="margin:0 0 6px; letter-spacing:-0.4px;">Acesso</h2>
-            <p class="sub">Entre com o seu código de acesso. O painel de controle fica disponível após o login.</p>
+            <p class="sub">Crie sua conta com código de ativação ou entre com email e senha.</p>
 
-            <label for="code">Código</label>
-            <input id="code" type="password" placeholder="Insira seu código" />
-
-            <div class="cta">
-              <button class="btn" id="loginBtn">Entrar</button>
-              <button class="btn secondary" id="logoutBtn">Sair</button>
+            <div class="card" style="margin:12px 0; background: rgba(255,255,255,0.65);">
+              <h3 style="margin:0 0 8px;">Criar conta</h3>
+              <label for="signup_code">Código de ativação</label>
+              <input id="signup_code" type="password" placeholder="Código fornecido pela equipe" />
+              <label for="signup_email">Email</label>
+              <input id="signup_email" type="email" placeholder="seu@email.com" />
+              <label for="signup_password">Senha</label>
+              <input id="signup_password" type="password" placeholder="Mínimo 6 caracteres" />
+              <div class="cta">
+                <button class="btn" id="signupBtn">Criar conta</button>
+              </div>
+              <div id="signupMsg" class="msg"></div>
             </div>
-            <div id="loginMsg" class="msg"></div>
+
+            <div class="card" style="margin:12px 0; background: rgba(255,255,255,0.65);">
+              <h3 style="margin:0 0 8px;">Entrar</h3>
+              <label for="login_email">Email</label>
+              <input id="login_email" type="email" placeholder="seu@email.com" />
+              <label for="login_password">Senha</label>
+              <input id="login_password" type="password" placeholder="Sua senha" />
+              <div class="cta">
+                <button class="btn" id="loginBtn">Entrar</button>
+                <button class="btn secondary" id="logoutBtn">Sair</button>
+              </div>
+              <div id="loginMsg" class="msg"></div>
+            </div>
 
             <div class="footer">
               Se o seu plano expirar, este acesso será bloqueado até resgatar um novo código.
@@ -309,9 +327,6 @@
 
                 <label for="phone_number_id">WHATSAPP_PHONE_NUMBER_ID</label>
                 <input id="phone_number_id" type="text" />
-
-                <label for="verify_token">WHATSAPP_VERIFY_TOKEN</label>
-                <input id="verify_token" type="text" />
 
                 <label for="graph_version">WHATSAPP_GRAPH_VERSION</label>
                 <input id="graph_version" type="text" placeholder="v20.0" />
@@ -393,20 +408,17 @@
       }
 
       async function login() {
-        const code = $('code').value;
         const r = await fetch('/api/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ code })
+          body: JSON.stringify({
+            email: $('login_email').value,
+            password: $('login_password').value,
+          })
         });
 
         if (!r.ok) {
-          const t = await r.text();
-          if (t.includes('expired_code')) {
-            setMsg($('loginMsg'), 'Seu código expirou. Solicite um novo código.', 'bad');
-          } else {
-            setMsg($('loginMsg'), 'Código inválido.', 'bad');
-          }
+          setMsg($('loginMsg'), 'Credenciais inválidas.', 'bad');
           await refreshMe();
           return;
         }
@@ -438,7 +450,6 @@
         $('system_prompt').value = data.system_prompt || '';
         $('whatsapp_token').value = data.whatsapp_token || '';
         $('phone_number_id').value = data.whatsapp_phone_number_id || '';
-        $('verify_token').value = data.whatsapp_verify_token || '';
         $('graph_version').value = data.whatsapp_graph_version || 'v20.0';
         $('memory_max').value = data.memory_max_messages ?? 10;
         setMsg($('cfgMsg'), 'OK', 'ok');
@@ -450,7 +461,6 @@
           system_prompt: $('system_prompt').value,
           whatsapp_token: $('whatsapp_token').value,
           whatsapp_phone_number_id: $('phone_number_id').value,
-          whatsapp_verify_token: $('verify_token').value,
           whatsapp_graph_version: $('graph_version').value || 'v20.0',
           memory_max_messages: Number($('memory_max').value || 10),
         };
@@ -473,6 +483,38 @@
         setMsg($('cfgMsg'), 'Salvo.', 'ok');
       }
 
+      async function signup() {
+        setMsg($('signupMsg'), 'Criando conta...', null);
+        const r = await fetch('/api/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            code: $('signup_code').value,
+            email: $('signup_email').value,
+            password: $('signup_password').value,
+          })
+        });
+
+        if (!r.ok) {
+          const t = await r.text();
+          if (t.includes('invalid_code') || t.includes('expired_code')) {
+            setMsg($('signupMsg'), 'Código inválido ou expirado.', 'bad');
+          } else if (t.includes('email_in_use')) {
+            setMsg($('signupMsg'), 'Este email já está cadastrado.', 'bad');
+          } else if (t.includes('weak_password')) {
+            setMsg($('signupMsg'), 'Senha fraca. Use pelo menos 6 caracteres.', 'bad');
+          } else {
+            setMsg($('signupMsg'), 'Não foi possível criar a conta.', 'bad');
+          }
+          await refreshMe();
+          return;
+        }
+
+        setMsg($('signupMsg'), 'Conta criada e acesso liberado.', 'ok');
+        await refreshMe();
+      }
+
+      $('signupBtn').addEventListener('click', () => signup().catch(() => setMsg($('signupMsg'), 'Falha ao criar conta.', 'bad')));
       $('loginBtn').addEventListener('click', () => login().catch(() => setMsg($('loginMsg'), 'Falha no login.', 'bad')));
       $('logoutBtn').addEventListener('click', () => logout().catch(() => setMsg($('loginMsg'), 'Falha ao sair.', 'bad')));
       $('reloadBtn').addEventListener('click', () => loadConfig().catch(() => setMsg($('cfgMsg'), 'Falha ao recarregar.', 'bad')));
