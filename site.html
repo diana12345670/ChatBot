@@ -957,161 +957,7 @@
               <div class="testimonial-author">
                 <div class="author-info">
                   <div class="author-name">Pedro Costa</div>
-                  <div class="webhook-info">
-                <h5><span class="icon-link"></span> Webhook URL</h5>
-                <code id="webhookUrl"></code>
-              </div>
-            </div>
-            <div class="tutorial-section">
-              <h4><span class="icon-file"></span> Tutorial Completo</h4>
-              <div class="tutorial-content">
-                <div class="tutorial-subsection">
-                  <h5><span class="icon-list"></span> Requisitos</h5>
-                  <ul class="tutorial-list">
-                    <li>Conta WhatsApp Business verificada</li>
-                    <li>Número de telefone com WhatsApp Business</li>
-                    <li>Cartão de crédito (para taxas da Meta)</li>
-                    <li>Chave API OpenAI</li>
-                  </ul>
-                </div>
-
-                <div class="tutorial-step">
-                  <div class="tutorial-number">1</div>
-                  <div class="tutorial-text">
-                    <h4>Criar App no Meta for Developers</h4>
-                    <p>Acesse o site oficial do Meta e crie seu aplicativo WhatsApp.</p>
-                    <a href="https://developers.facebook.com/apps" target="_blank" class="tutorial-link">
-                      <span class="icon-link"></span>
-                      <span>developers.facebook.com/apps</span>
-                    </a>
-                    <div class="video-tutorial">
-                      <h5><span class="icon-video"></span> Vídeo Tutorial</h5>
-                      <a href="#" class="video-link" onclick="alert('Em breve: Vídeo completo de criação de App Meta')">
-                        <span class="icon-play"></span>
-                        Como criar App WhatsApp do zero
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="tutorial-step">
-                  <div class="tutorial-number">2</div>
-                  <div class="tutorial-text">
-                    <h4>Configurar WhatsApp Business API</h4>
-                    <p>Adicione o produto WhatsApp ao seu App e configure as credenciais.</p>
-                    <div class="credential-guide">
-                      <div class="credential-item">
-                        <span class="cred-label">Webhook URL:</span>
-                        <code id="webhookUrlTutorial"></code>
-                      </div>
-                      <div class="credential-item">
-                        <span class="cred-label">Verify Token:</span>
-                        <input type="text" id="verifyTokenDisplay" readonly style="background: #f5f5f5; font-size: 12px;" />
-                      </div>
-                    </div>
-                    <div class="video-tutorial">
-                      <h5><span class="icon-video"></span> Vídeo Tutorial</h5>
-                      <a href="#" class="video-link" onclick="alert('Em breve: Vídeo completo de configuração WhatsApp API')">
-                        <span class="icon-play"></span>
-                        Configurar WhatsApp Business API
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="tutorial-step">
-                  <div class="tutorial-number">3</div>
-                  <div class="tutorial-text">
-                    <h4>Obter Tokens de Acesso</h4>
-                    <p>Gere as credenciais necessárias no painel do Meta.</p>
-                    <div class="tokens-guide">
-                      <div class="token-item">
-                        <h5><span class="icon-key"></span> WHATSAPP_TOKEN</h5>
-                        <p>Token de acesso permanente para enviar mensagens</p>
-                        <a href="#" class="video-link" onclick="alert('Em breve: Vídeo de como gerar Permanent Token')">
-                          <span class="icon-play"></span>
-                          Vídeo: Gerar Permanent Token
-                        </a>
-                      </div>
-                      <div class="token-item">
-                        <h5><span class="icon-phone"></span> PHONE_NUMBER_ID</h5>
-                        <p>ID do seu número de telefone WhatsApp</p>
-                        <a href="#" class="video-link" onclick="alert('Em breve: Vídeo de como encontrar Phone Number ID')">
-                          <span class="icon-play"></span>
-                          Vídeo: Encontrar Phone ID
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="tutorial-step">
-                  <div class="tutorial-number">4</div>
-                  <div class="tutorial-text">
-                    <h4>Configurar Webhook</h4>
-                    <p>Use as credenciais abaixo para conectar seu WhatsApp ao sistema.</p>
-                    <div class="webhook-setup">
-                      <div class="setup-item">
-                        <span class="setup-label">1. Copie a URL:</span>
-                        <code id="webhookUrlFinal"></code>
-                      </div>
-                      <div class="setup-item">
-                        <span class="setup-label">2. Cole em:</span>
-                        <a href="https://developers.facebook.com/apps" target="_blank" class="tutorial-link">
-                          <span class="icon-link"></span>
-                          Meta for Developers → WhatsApp → Configuration
-                        </a>
-                      </div>
-                      <div class="setup-item">
-                        <span class="setup-label">3. Verify Token:</span>
-                        <input type="text" id="verifyTokenFinal" readonly style="background: #f5f5f5; font-size: 12px;" />
-                      </div>
-                      <div class="setup-item">
-                        <span class="setup-label">4. Inscreva campos:</span>
-                        <code>messages, message_deliveries, message_reads</code>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="tutorial-step">
-                  <div class="tutorial-number">5</div>
-                  <div class="tutorial-text">
-                    <h4>Configurar OpenAI</h4>
-                    <p>Obtenha sua chave API da OpenAI para alimentar a IA.</p>
-                    <div class="openai-guide">
-                      <a href="https://platform.openai.com/api-keys" target="_blank" class="tutorial-link">
-                        <span class="icon-link"></span>
-                        <span>platform.openai.com/api-keys</span>
-                      </a>
-                      <div class="video-tutorial">
-                        <h5><span class="icon-video"></span> Vídeo Tutorial</h5>
-                        <a href="#" class="video-link" onclick="alert('Em breve: Vídeo completo de configuração OpenAI')">
-                          <span class="icon-play"></span>
-                          Como criar chave API OpenAI
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="tutorial-step">
-                  <div class="tutorial-number">6</div>
-                  <div class="tutorial-text">
-                    <h4>Finalizar Configuração</h4>
-                    <p>Preencha todos os campos no painel acima e ative seu chatbot.</p>
-                    <div class="final-checklist">
-                      <h5><span class="icon-check"></span> Checklist Final:</h5>
-                      <ul class="checklist">
-                        <li><span class="icon-check"></span> WHATSAPP_TOKEN configurado</li>
-                        <li><span class="icon-check"></span> PHONE_NUMBER_ID preenchido</li>
-                        <li><span class="icon-check"></span> Webhook verificado no Meta</li>
-                        <li><span class="icon-check"></span> Prompt personalizado</li>
-                        <li><span class="icon-check"></span> OpenAI API Key ativa</li>
-                        <li><span class="icon-check"></span> Teste de mensagem enviado</li>
-                      </ul>
-                    </div>
-                  </div>
+                  <div class="author-title">CEO, TechStore</div>
                 </div>
               </div>
             </div>
@@ -1159,104 +1005,274 @@
         <div class="card" style="margin-top:14px;">
           <p class="k">Contato</p>
           <p class="v">+55 71 996086559</p>
-              <label for="signup_code">Código de ativação</label>
-              <input id="signup_code" type="password" placeholder="Código fornecido pela equipe" />
+        </div>
+      </section>
+
+      <section id="login">
+        <div class="login-container">
+          <div class="login-card">
+            <div class="card-header">
+              <h3><span class="icon-lock"></span> Acesso ao Sistema</h3>
+              <p>Entre com sua conta para gerenciar seu chatbot</p>
             </div>
-            <div class="form-group">
-              <label for="signup_email">Email</label>
-              <input id="signup_email" type="email" placeholder="seu@email.com" />
+            
+            <div class="form-section">
+              <h3>Criar conta</h3>
+              <div class="form-group">
+                <label for="signup_code">Código de ativação</label>
+                <input id="signup_code" type="password" placeholder="Código fornecido pela equipe" />
+              </div>
+              <div class="form-group">
+                <label for="signup_email">Email</label>
+                <input id="signup_email" type="email" placeholder="seu@email.com" />
+              </div>
+              <div class="form-group">
+                <label for="signup_password">Senha</label>
+                <input id="signup_password" type="password" placeholder="Mínimo 6 caracteres" />
+              </div>
+              <button class="btn btn-primary" id="signupBtn">Criar conta</button>
+              <div id="signupMsg" class="msg"></div>
             </div>
-            <div class="form-group">
-              <label for="signup_password">Senha</label>
-              <input id="signup_password" type="password" placeholder="Mínimo 6 caracteres" />
+
+            <div class="divider">
+              <span>ou</span>
             </div>
-            <button class="btn btn-primary" id="signupBtn">Criar conta</button>
-            <div id="signupMsg" class="msg"></div>
+
+            <div class="form-section">
+              <h3>Entrar na conta</h3>
+              <div class="form-group">
+                <label for="login_email">Email</label>
+                <input id="login_email" type="email" placeholder="seu@email.com" />
+              </div>
+              <div class="form-group">
+                <label for="login_password">Senha</label>
+                <input id="login_password" type="password" placeholder="Sua senha" />
+              </div>
+              <div class="form-actions">
+                <button class="btn btn-primary" id="loginBtn">Entrar</button>
+                <button class="btn btn-secondary" id="logoutBtn" style="display:none;">Sair</button>
+              </div>
+              <div id="loginMsg" class="msg"></div>
+            </div>
+
+            <div class="login-footer">
+              <p>Se o seu plano expirar, este acesso será bloqueado até resgatar um novo código.</p>
+            </div>
           </div>
 
-          <div class="divider">
-            <span>ou</span>
-          </div>
+          <div class="dashboard-card">
+            <div class="card-header">
+              <h3><span class="icon-dashboard"></span> Painel de Controle</h3>
+              <p>Configure WhatsApp e o prompt do atendimento</p>
+            </div>
 
-          <div class="form-section">
-            <h3>Entrar na conta</h3>
-            <div class="form-group">
-              <label for="login_email">Email</label>
-              <input id="login_email" type="email" placeholder="seu@email.com" />
+            <div id="panelLocked" class="access-denied">
+              <div class="denied-icon"><span class="icon-lock"></span></div>
+              <h3><span class="icon-lock"></span> Acesso ao Sistema</h3>
+              <p>Faça login para acessar o painel de configurações.</p>
             </div>
-            <div class="form-group">
-              <label for="login_password">Senha</label>
-              <input id="login_password" type="password" placeholder="Sua senha" />
-            </div>
-            <div class="form-actions">
-              <button class="btn btn-primary" id="loginBtn">Entrar</button>
-              <button class="btn btn-secondary" id="logoutBtn" style="display:none;">Sair</button>
-            </div>
-            <div id="loginMsg" class="msg"></div>
-          </div>
 
-          <div class="login-footer">
-            <p>Se o seu plano expirar, este acesso será bloqueado até resgatar um novo código.</p>
+            <div id="panelExpired" class="access-denied" style="display:none;">
+              <div class="denied-icon"><span class="icon-clock"></span></div>
+              <h4>Plano Expirado</h4>
+              <p>Seu plano expirou. Por favor resgate um novo código para continuar usando nosso chatbot.</p>
+            </div>
+
+            <div id="panel" class="dashboard-content" style="display:none;">
+              <div class="config-section">
+                <h4><span class="icon-gear"></span> Configurações do Chatbot</h4>
+                
+                <div class="form-group">
+                  <label for="system_prompt">Prompt do Assistente</label>
+                  <textarea id="system_prompt" placeholder="Defina o comportamento do assistente"></textarea>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="whatsapp_token">WHATSAPP_TOKEN</label>
+                    <input id="whatsapp_token" type="password" />
+                  </div>
+                  <div class="form-group">
+                    <label for="phone_number_id">PHONE_NUMBER_ID</label>
+                    <input id="phone_number_id" type="text" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="graph_version">WHATSAPP_GRAPH_VERSION</label>
+                  <input id="graph_version" type="text" placeholder="v20.0" />
+                </div>
+
+                <div class="form-group">
+                  <label for="memory_max">Memória (máx. mensagens)</label>
+                  <input id="memory_max" type="number" min="0" step="1" readonly style="background: #f5f5f5; cursor: not-allowed;" />
+                  <small style="color: var(--muted); font-size: 12px; display: block; margin-top: 4px;">Definido automaticamente conforme seu plano</small>
+                </div>
+
+                <div class="form-actions">
+                  <button class="btn btn-primary" id="saveBtn">Salvar Configurações</button>
+                  <button class="btn btn-secondary" id="reloadBtn">Recarregar</button>
+                </div>
+                <div id="cfgMsg" class="msg"></div>
+              </div>
+
+              <div class="tutorial-section">
+                <h4><span class="icon-file"></span> Tutorial Completo</h4>
+                <div class="tutorial-content">
+                  <div class="tutorial-subsection">
+                    <h5><span class="icon-list"></span> Requisitos</h5>
+                    <ul class="tutorial-list">
+                      <li>Conta WhatsApp Business verificada</li>
+                      <li>Número de telefone com WhatsApp Business</li>
+                      <li>Cartão de crédito (para taxas da Meta)</li>
+                      <li>Chave API OpenAI</li>
+                    </ul>
+                  </div>
+
+                  <div class="tutorial-step">
+                    <div class="tutorial-number">1</div>
+                    <div class="tutorial-text">
+                      <h4>Criar App no Meta for Developers</h4>
+                      <p>Acesse o site oficial do Meta e crie seu aplicativo WhatsApp.</p>
+                      <a href="https://developers.facebook.com/apps" target="_blank" class="tutorial-link">
+                        <span class="icon-link"></span>
+                        <span>developers.facebook.com/apps</span>
+                      </a>
+                      <div class="video-tutorial">
+                        <h5><span class="icon-video"></span> Vídeo Tutorial</h5>
+                        <a href="#" class="video-link" onclick="alert('Em breve: Vídeo completo de criação de App Meta')">
+                          <span class="icon-play"></span>
+                          Como criar App WhatsApp do zero
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="tutorial-step">
+                    <div class="tutorial-number">2</div>
+                    <div class="tutorial-text">
+                      <h4>Configurar WhatsApp Business API</h4>
+                      <p>Adicione o produto WhatsApp ao seu App e configure as credenciais.</p>
+                      <div class="credential-guide">
+                        <div class="credential-item">
+                          <span class="cred-label">Webhook URL:</span>
+                          <code id="webhookUrlTutorial"></code>
+                        </div>
+                        <div class="credential-item">
+                          <span class="cred-label">Verify Token:</span>
+                          <input type="text" id="verifyTokenDisplay" readonly style="background: #f5f5f5; font-size: 12px;" />
+                        </div>
+                      </div>
+                      <div class="video-tutorial">
+                        <h5><span class="icon-video"></span> Vídeo Tutorial</h5>
+                        <a href="#" class="video-link" onclick="alert('Em breve: Vídeo completo de configuração WhatsApp API')">
+                          <span class="icon-play"></span>
+                          Configurar WhatsApp Business API
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="tutorial-step">
+                    <div class="tutorial-number">3</div>
+                    <div class="tutorial-text">
+                      <h4>Obter Tokens de Acesso</h4>
+                      <p>Gere as credenciais necessárias no painel do Meta.</p>
+                      <div class="tokens-guide">
+                        <div class="token-item">
+                          <h5><span class="icon-key"></span> WHATSAPP_TOKEN</h5>
+                          <p>Token de acesso permanente para enviar mensagens</p>
+                          <a href="#" class="video-link" onclick="alert('Em breve: Vídeo de como gerar Permanent Token')">
+                            <span class="icon-play"></span>
+                            Vídeo: Gerar Permanent Token
+                          </a>
+                        </div>
+                        <div class="token-item">
+                          <h5><span class="icon-phone"></span> PHONE_NUMBER_ID</h5>
+                          <p>ID do seu número de telefone WhatsApp</p>
+                          <a href="#" class="video-link" onclick="alert('Em breve: Vídeo de como encontrar Phone Number ID')">
+                            <span class="icon-play"></span>
+                            Vídeo: Encontrar Phone ID
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="tutorial-step">
+                    <div class="tutorial-number">4</div>
+                    <div class="tutorial-text">
+                      <h4>Configurar Webhook</h4>
+                      <p>Use as credenciais abaixo para conectar seu WhatsApp ao sistema.</p>
+                      <div class="webhook-setup">
+                        <div class="setup-item">
+                          <span class="setup-label">1. Copie a URL:</span>
+                          <code id="webhookUrlFinal"></code>
+                        </div>
+                        <div class="setup-item">
+                          <span class="setup-label">2. Cole em:</span>
+                          <a href="https://developers.facebook.com/apps" target="_blank" class="tutorial-link">
+                            <span class="icon-link"></span>
+                            Meta for Developers → WhatsApp → Configuration
+                          </a>
+                        </div>
+                        <div class="setup-item">
+                          <span class="setup-label">3. Verify Token:</span>
+                          <input type="text" id="verifyTokenFinal" readonly style="background: #f5f5f5; font-size: 12px;" />
+                        </div>
+                        <div class="setup-item">
+                          <span class="setup-label">4. Inscreva campos:</span>
+                          <code>messages, message_deliveries, message_reads</code>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="tutorial-step">
+                    <div class="tutorial-number">5</div>
+                    <div class="tutorial-text">
+                      <h4>Configurar OpenAI</h4>
+                      <p>Obtenha sua chave API da OpenAI para alimentar a IA.</p>
+                      <div class="openai-guide">
+                        <a href="https://platform.openai.com/api-keys" target="_blank" class="tutorial-link">
+                          <span class="icon-link"></span>
+                          <span>platform.openai.com/api-keys</span>
+                        </a>
+                        <div class="video-tutorial">
+                          <h5><span class="icon-video"></span> Vídeo Tutorial</h5>
+                          <a href="#" class="video-link" onclick="alert('Em breve: Vídeo completo de configuração OpenAI')">
+                            <span class="icon-play"></span>
+                            Como criar chave API OpenAI
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="tutorial-step">
+                    <div class="tutorial-number">6</div>
+                    <div class="tutorial-text">
+                      <h4>Finalizar Configuração</h4>
+                      <p>Preencha todos os campos no painel acima e ative seu chatbot.</p>
+                      <div class="final-checklist">
+                        <h5><span class="icon-check"></span> Checklist Final:</h5>
+                        <ul class="checklist">
+                          <li><span class="icon-check"></span> WHATSAPP_TOKEN configurado</li>
+                          <li><span class="icon-check"></span> PHONE_NUMBER_ID preenchido</li>
+                          <li><span class="icon-check"></span> Webhook verificado no Meta</li>
+                          <li><span class="icon-check"></span> Prompt personalizado</li>
+                          <li><span class="icon-check"></span> OpenAI API Key ativa</li>
+                          <li><span class="icon-check"></span> Teste de mensagem enviado</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
-        <div class="dashboard-card">
-          <div class="card-header">
-            <h3><span class="icon-dashboard"></span> Painel de Controle</h3>
-            <p>Configure WhatsApp e o prompt do atendimento</p>
-          </div>
-
-          <div id="panelLocked" class="access-denied">
-            <div class="denied-icon"><span class="icon-lock"></span></div>
-            <h3><span class="icon-lock"></span> Acesso ao Sistema</h3>
-            <p>Faça login para acessar o painel de configurações.</p>
-          </div>
-
-          <div id="panelExpired" class="access-denied" style="display:none;">
-            <div class="denied-icon"><span class="icon-clock"></span></div>
-            <h4>Plano Expirado</h4>
-            <p>Seu plano expirou. Por favor resgate um novo código para continuar usando nosso chatbot.</p>
-          </div>
-
-          <div id="panel" class="dashboard-content" style="display:none;">
-            <div class="config-section">
-              <h4><span class="icon-gear"></span> Configurações do Chatbot</h4>
-              
-              <div class="form-group">
-                <label for="system_prompt">Prompt do Assistente</label>
-                <textarea id="system_prompt" placeholder="Defina o comportamento do assistente"></textarea>
-              </div>
-
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="whatsapp_token">WHATSAPP_TOKEN</label>
-                  <input id="whatsapp_token" type="password" />
-                </div>
-                <div class="form-group">
-                  <label for="phone_number_id">PHONE_NUMBER_ID</label>
-                  <input id="phone_number_id" type="text" />
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="graph_version">WHATSAPP_GRAPH_VERSION</label>
-                <input id="graph_version" type="text" placeholder="v20.0" />
-              </div>
-
-              <div class="form-group">
-                <label for="memory_max">Memória (máx. mensagens)</label>
-                <input id="memory_max" type="number" min="0" step="1" readonly style="background: #f5f5f5; cursor: not-allowed;" />
-                <small style="color: var(--muted); font-size: 12px; display: block; margin-top: 4px;">Definido automaticamente conforme seu plano</small>
-              </div>
-
-              <div class="form-actions">
-                <button class="btn btn-primary" id="saveBtn">Salvar Configurações</button>
-                <button class="btn btn-secondary" id="reloadBtn">Recarregar</button>
-              </div>
-              <div id="cfgMsg" class="msg"></div>
-    </div>
-
-    <script>
+      </section>
       const $ = (id) => document.getElementById(id);
 
       function showTab(tab) {

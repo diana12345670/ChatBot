@@ -10,8 +10,7 @@ import hmac
 from collections import deque
 import requests
 from fastapi import FastAPI, Request, HTTPException, Response
-from fastapi.responses import PlainTextResponse
-from fastapi.responses import HTMLResponse
+from fastapi.responses import PlainTextResponse, HTMLResponse
 
 from openai import OpenAI
 
@@ -213,15 +212,88 @@ def extract_incoming_messages(body: dict) -> list[tuple[str, str]]:
 
 @app.get("/health")
 def health():
-    return {"ok": True}
+    return {"status": "healthy", "service": "whatsapp-bot"}
+
+
+@app.get("/debug/files")
+def debug_files():
+    """Debug endpoint to check if HTML files are found"""
+    files_status = {}
+    
+    # Check site.html
+    site_paths = [
+        Path(__file__).parent / "site.html",
+        Path("site.html"),
+        Path("/app/site.html"),
+    ]
+    
+    files_status["site.html"] = {}
+    for path in site_paths:
+        files_status["site.html"][str(path)] = path.exists()
+    
+    # Check super_admin.html
+    admin_paths = [
+        Path(__file__).parent / "super_admin.html",
+        Path("super_admin.html"),
+        Path("/app/super_admin.html"),
+    ]
+    
+    files_status["super_admin.html"] = {}
+    for path in admin_paths:
+        files_status["super_admin.html"][str(path)] = path.exists()
+    
+    return files_status
 
 
 @app.get("/")
 def admin_home():
-    html_path = Path(__file__).with_name("site.html")
-    if not html_path.exists():
-        raise HTTPException(status_code=500, detail="site.html not found")
-    return HTMLResponse(content=html_path.read_text(encoding="utf-8"))
+    # Try multiple possible paths for site.html
+    possible_paths = [
+        Path(__file__).parent / "site.html",  # Same directory as main.py
+        Path("site.html"),  # Current working directory
+        Path("/app/site.html"),  # Railway container path
+    ]
+    
+    html_path = None
+    for path in possible_paths:
+        if path.exists():
+            html_path = path
+            break
+    
+    if not html_path:
+        # Return a simple HTML error page if file not found
+        return HTMLResponse(
+            content="""
+            <html>
+                <head><title>File Not Found</title></head>
+                <body>
+                    <h1>site.html not found</h1>
+                    <p>Checked paths:</p>
+                    <ul>
+                        {"".join(f"<li>{p} - {'✓' if p.exists() else '✗'}</li>" for p in possible_paths)}
+                    </ul>
+                </body>
+            </html>
+            """,
+            status_code=500,
+            headers={"Content-Type": "text/html; charset=utf-8"}
+        )
+    
+    try:
+        html_content = html_path.read_text(encoding="utf-8")
+        # Debug: print first 100 chars to verify it's HTML
+        print(f"DEBUG: HTML content starts with: {html_content[:100]}")
+        
+        return HTMLResponse(
+            content=html_content,
+            headers={"Content-Type": "text/html; charset=utf-8"}
+        )
+    except Exception as e:
+        return HTMLResponse(
+            content=f"<html><body><h1>Error reading HTML: {str(e)}</h1></body></html>",
+            status_code=500,
+            headers={"Content-Type": "text/html; charset=utf-8"}
+        )
 
 
 def _get_session_account_id(request: Request) -> str | None:
@@ -410,10 +482,26 @@ async def set_client_config(request: Request):
 
 @app.get("/admin")
 def super_admin_page():
-    html_path = Path(__file__).with_name("super_admin.html")
-    if not html_path.exists():
-        raise HTTPException(status_code=500, detail="super_admin.html not found")
-    return HTMLResponse(content=html_path.read_text(encoding="utf-8"))
+    # Try multiple possible paths for super_admin.html
+    possible_paths = [
+        Path(__file__).parent / "super_admin.html",  # Same directory as main.py
+        Path("super_admin.html"),  # Current working directory
+        Path("/app/super_admin.html"),  # Railway container path
+    ]
+    
+    html_path = None
+    for path in possible_paths:
+        if path.exists():
+            html_path = path
+            break
+    
+    if not html_path:
+        raise HTTPException(status_code=500, detail="super_admin.html not found in any expected location")
+    
+    return HTMLResponse(
+        content=html_path.read_text(encoding="utf-8"),
+        headers={"Content-Type": "text/html; charset=utf-8"}
+    )
 
 
 @app.get("/api/admin/metrics")
